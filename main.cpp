@@ -5,8 +5,6 @@
 #include <sstream>
 using namespace std;
 
-void mfqs(process raw, int arrCount);
-
 
 
 class process{
@@ -24,9 +22,13 @@ class process{
 		bool tail;
 };
 
-void roundRobinProcessing(process arr[], int arrCount, int tq);
-void queueUpdationRoundRobin(process arr[], int timer,int arrCount, int maxProccessIndex);
-void queueMaintainenceRoundRobin(process arr[], int arrCount);
+void mfqs(process raw, int arrCount);
+void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum);
+void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat[]);
+void findavgTimeRoundRobin(process arr[], int arrCount, int quantum);
+
+
+
 void srt(process arr[], int arrCount);
 void hrt(process arr[], int arrCount);
 void display(process proc);
@@ -161,9 +163,6 @@ void mfqs(process raw, int arrCount){
 			break;
 		}
 	}
-	
-	int time=0;
-	bool processed;
 
 
 }
@@ -176,140 +175,112 @@ void display(process proc){
 	cout << proc.pid << " " << proc.burst << " " << proc.arrival << " " << proc.priority << " " << proc.deadline << " " << proc.io << "\n";
 }
 
-void queueUpdationRoundRobin(process arr[], int timer,int arrCount, int maxProccessIndex){
-    int zeroIndex;
-    for(int i = 0; i < arrCount; i++){
-        if(arr[i].queue == 0){
-            zeroIndex = i;
-            break;
-        }
-    }  
-    arr[zeroIndex].queue = maxProccessIndex + 1;
-}
-
-void queueMaintainenceRoundRobin(process arr[], int arrCount){
-    for(int i = 0; (i < arrCount-1) && (arr[i+1].queue != 0) ; i++){
-        int temp = arr[i].queue;
-        arr[i].queue = arr[i+1].queue;
-        arr[i+1].queue = temp;
-    }
-}
-
-void checkNewArrivalRoundRobin(int timer, process arr[], int arrCount, int maxProccessIndex){
-    if(timer <= arr[arrCount-1].arrival){
-       bool newArrival = false;
-       for(int j = (maxProccessIndex+1); j < arrCount; j++){
-             if(arr[j].arrival <= timer){
-              if(maxProccessIndex < j){
-                 maxProccessIndex = j;
-                 newArrival = true;
-              }
-           }
-       }
-       //adds the incoming process to the ready queue
-       //(if any arrives)
-       if(newArrival)
-          queueUpdationRoundRobin(arr,timer,arrCount, maxProccessIndex);
-    }
-}
-
-void roundRobinProcessing(process arr[], int arrCount, int tq) {
-	bool complete[arrCount];
-	float avgWait = 0, avgTT = 0;
-	int timer = 0, maxProcessIndex = 0;
-	int temp_burst[arrCount];
-	int turn[arrCount];
-	int wait[arrCount];
-
-	for(int i = 0; i < arrCount; i++){
-        temp_burst[i] = arr[i].burst;
-    }
-
-	for(int i = 0; i < arrCount; i++){    //Initializing the complete array
-        complete[i] = false;
-    }
-    while(timer < arr[0].arrival)    //Incrementing Timer until the first process arrives
-        timer++;
-    arr[0].queue = 1;
-     
-    while(true){
-        bool flag = true;
-        for(int i = 0; i < arrCount; i++){
-            if(temp_burst[i] != 0){
-                flag = false;
-                break;
-            }
-        }
-        if(flag)
-            break;
- 
-        for(int i = 0; (i < arrCount) && (arr[i].queue != 0); i++){
-            int ctr = 0;
-            while((ctr < tq) && (temp_burst[arr[0].queue-1] > 0)){
-                temp_burst[arr[0].queue-1] -= 1;
-                timer += 1;
-                ctr++;
- 
-                //Checking and Updating the ready queue until all the processes arrive
-                checkNewArrivalRoundRobin(timer, arr, arrCount, maxProcessIndex);
-            }
-            //If a process is completed then store its exit time
-            //and mark it as completed
-            if((temp_burst[arr[0].queue-1] == 0) && (complete[arr[0].queue-1] == false)){
-                //turn array currently stores the completion time
-                turn[arr[0].queue-1] = timer;       
-                complete[arr[0].queue-1] = true;
-            }
-             
-              //checks whether or not CPU is idle
-            bool idle = true;
-            if(arr[arrCount-1].queue == 0){
-                for(int i = 0; i < arrCount && arr[i].queue != 0; i++){
-                    if(complete[arr[i].queue-1] == false){
-                        idle = false;
-                    }
-                }
-            }
-            else
-                idle = false;
- 
-            if(idle){
-                timer++;
-                checkNewArrivalRoundRobin(timer, arr, arrCount, maxProcessIndex);
-            }
-       
-            //Maintaining the entries of processes
-            //after each premption in the ready Queue
-            queueMaintainenceRoundRobin(arr, arrCount);
-        }
-    }
- 
-    for(int i = 0; i < arrCount; i++){
-        turn[i] = turn[i] - arr[i].arrival;
-        wait[i] = turn[i] - arr[i].burst;
-    }
- 
-    cout << "\nProgram No.\tArrival Time\tBurst Time\tWait Time\tTurnAround Time"
-         << endl;
-    for(int i = 0; i < arrCount; i++){
-        cout<<i+1<<"\t\t"<<arr[i].arrival<<"\t\t"
-          <<arr[i].burst<<"\t\t"<<wait[i]<<"\t\t"<<turn[i]<<endl;
-    }
-    for(int i =0; i< arrCount; i++){
-        avgWait += wait[i];
-        avgTT += turn[i];
-    }
-    cout<<"\nAverage wait time : "<<(avgWait/arrCount)
-      <<"\nAverage Turn Around Time : "<<(avgTT/arrCount);
- 
-}
-
 void swap(process* a, process* b){
     process t = *a;
     *a = *b;
     *b = t;
 }
 
+void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum)
+{
+    // Make a copy of burst times bt[] to store remaining
+    // burst times.
+
+    int rem_bt[arrCount];
+    for (int i = 0 ; i < arrCount ; i++)
+        rem_bt[i] = arr[i].burst;
+ 
+    int t = 0; // Current time
+ 
+    // Keep traversing processes in round robin manner
+    // until all of them are not done.
+    while (1)
+    {
+        bool done = true;
+ 
+        // Traverse all processes one by one repeatedly
+        for (int i = 0 ; i < arrCount; i++)
+        {
+            // If burst time of a process is greater than 0
+            // then only need to process further
+            if (rem_bt[i] > 0)
+            {
+                done = false; // There is a pending process
+ 
+                if (rem_bt[i] > quantum)
+                {
+                    // Increase the value of t i.e. shows
+                    // how much time a process has been processed
+                    t += quantum;
+ 
+                    // Decrease the burst_time of current process
+                    // by quantum
+                    rem_bt[i] -= quantum;
+                }
+ 
+                // If burst time is smaller than or equal to
+                // quantum. Last cycle for this process
+                else
+                {
+                    // Increase the value of t i.e. shows
+                    // how much time a process has been processed
+                    t = t + rem_bt[i];
+ 
+                    // Waiting time is current time minus time
+                    // used by this process
+                    wt[i] = t - arr[i].burst;
+ 
+                    // As the process gets fully executed
+                    // make its remaining burst time = 0
+                    rem_bt[i] = 0;
+                }
+            }
+        }
+ 
+        // If all processes are done
+        if (done == true)
+        break;
+    }
+}
+
+// Function to calculate turn around time
+void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat[])
+{
+    // calculating turnaround time by adding
+    // bt[i] + wt[i]
+    for (int i = 0; i < arrCount ; i++)
+        tat[i] = arr[i].burst + wt[i];
+}
+
+void findavgTimeRoundRobin(process arr[], int arrCount, int quantum)
+{
+    int wt[arrCount], tat[arrCount], total_wt = 0, total_tat = 0;
+ 
+    // Function to find waiting time of all processes
+    findWaitingTimeRoundRobin(arr, arrCount, wt, quantum);
+ 
+    // Function to find turn around time for all processes
+    findTurnAroundTimeRoundRobin(arr, arrCount, wt, tat);
+ 
+    // Display processes along with all details
+    cout << "Processes "<< " Burst time "
+        << " Waiting time " << " Turn around time\n";
+ 
+    // Calculate total waiting time and total turn
+    // around time
+    for (int i=0; i<arrCount; i++)
+    {
+        total_wt = total_wt + wt[i];
+        total_tat = total_tat + tat[i];
+        cout << " " << i+1 << "\t\t" << arr[i].burst <<"\t "
+            << wt[i] <<"\t\t " << tat[i] <<endl;
+    }
+ 
+    cout << "Average waiting time = "
+        << (float)total_wt / (float)arrCount;
+    cout << "\nAverage turn around time = "
+        << (float)total_tat / (float)arrCount;
+}
 
 /* This function takes last element as pivot, places
    the pivot element at its correct position in sorted

@@ -8,8 +8,9 @@ void mfqs();
 void srt();
 void hrt();
 
-class process{
 
+
+class process{
 	public:
 		int pid;
 		int burst;
@@ -19,8 +20,12 @@ class process{
 		int io;
 		int queue;
 		process* next;
-		process* previous;
+		process* prev;
+		bool head;
+		bool tail;
 };
+
+
 
 void display(process proc);
 void quickSort(process arr[], int low, int high);
@@ -28,7 +33,7 @@ int partition (process arr[], int low, int high);
 void swap(process* a, process* b);
 
 int main(int argc, char** argv){
-	
+	cout << "Size of a proc: " << sizeof (process)<<"\n";
 	if(argc!=2){
 		printf("Incorrect parameter number\n");
 		return 0;
@@ -39,24 +44,24 @@ int main(int argc, char** argv){
 
 	string line;
 	int ProcNum=0;
-	if(inputFile && outputFile){ 
-		while(getline(inputFile,line)){
-			if(line.find('-')>line.length()){
-				outputFile << line << "\n";
-				ProcNum++;
-			}		
-		}
+	while(getline(inputFile,line)){
+		if(line.find('-')>line.length()&&line.find('P')>line.length()){
+			outputFile << line << "\n";
+			ProcNum++;
+		}	
+		outputFile.flush();
 	} 
-	else {
-		//Something went wrong
-		printf("File Read Error");
-	}
+
 	//Closing file
 	inputFile.close();
 	outputFile.close();
+
 	ifstream commands {"cmd.txt"};
-	process arr[ProcNum];
-	for(int i=0;i<ProcNum;i++){
+	process* arr=new process[ProcNum];
+	printf("Arr made\n");
+
+	for(int i=1;i<ProcNum;i++){
+		
 		line="";
 		getline(commands,line);
 		stringstream is(line);
@@ -78,6 +83,19 @@ int main(int argc, char** argv){
 	commands.close();
 
 	quickSort(arr,0,ProcNum-1);
+	arr[0].next=&arr[1];
+	arr[0].tail=false;
+	arr[0].head=true;
+	for(int i=1;i<ProcNum-1;i++){
+		arr[i].next=&arr[i+1];
+		arr[i].prev=&arr[i-1];
+		arr[i].head=false;
+		arr[i].tail=false;
+		display(arr[i]);
+	}
+	arr[ProcNum].prev=&arr[ProcNum-1];
+	arr[ProcNum].head=false;
+	arr[ProcNum].tail=true;
 
 	bool select=false;
 	string mode="";
@@ -85,7 +103,7 @@ int main(int argc, char** argv){
 		cout<< "Select mfqs, srt, or hrt\n";
 		cin>>mode;
 		if(mode=="mfqs"){
-			mfqs();
+			mfqs(arr[0]);
 			select=true;
 		}
 		else if(mode=="srt"){
@@ -102,7 +120,7 @@ int main(int argc, char** argv){
     return 0;
 }
 
-void mfqs(){
+void mfqs(process raw){
 	int queues, quantum, age;
 
 	while(1){	
@@ -139,6 +157,10 @@ void mfqs(){
 		}
 	}
 	
+	int time=0;
+	bool processed;
+
+
 }
 
 void srt(){}

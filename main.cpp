@@ -186,7 +186,7 @@ void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantu
     // Make a copy of burst times bt[] to store remaining
     // burst times.
 
-    int rem_bt[arrCount];
+    int* rem_bt = new int[arrCount];
     for (int i = 0 ; i < arrCount ; i++)
         rem_bt[i] = arr[i].burst;
  
@@ -254,7 +254,9 @@ void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat
 
 void findavgTimeRoundRobin(process arr[], int arrCount, int quantum)
 {
-    int wt[arrCount], tat[arrCount], total_wt = 0, total_tat = 0;
+    int* wt = new int[arrCount];
+	int* tat = new int[arrCount];
+	int total_wt = 0, total_tat = 0;
  
     // Function to find waiting time of all processes
     findWaitingTimeRoundRobin(arr, arrCount, wt, quantum);

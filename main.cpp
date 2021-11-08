@@ -4,9 +4,11 @@
 #include <limits>
 #include <sstream>
 using namespace std;
-void mfqs();
-void srt();
-void hrt();
+
+void mfqs(process raw, int arrCount);
+void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum);
+void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat[]);
+void findavgTimeRoundRobin(process arr[], int arrCount, int quantum);
 
 
 
@@ -26,7 +28,8 @@ class process{
 };
 
 
-
+void srt(process arr[], int arrCount);
+void hrt(process arr[], int arrCount);
 void display(process proc);
 void quickSort(process arr[], int low, int high);
 int partition (process arr[], int low, int high);
@@ -34,6 +37,8 @@ void swap(process* a, process* b);
 
 int main(int argc, char** argv){
 	cout << "Size of a proc: " << sizeof (process)<<"\n";
+	int arrCount = 0;
+	
 	if(argc!=2){
 		printf("Incorrect parameter number\n");
 		return 0;
@@ -78,6 +83,7 @@ int main(int argc, char** argv){
 		arr[i].deadline=n;
 		is >> n;
 		arr[i].io=n;
+		arrCount++;
 	}
 
 	commands.close();
@@ -103,15 +109,15 @@ int main(int argc, char** argv){
 		cout<< "Select mfqs, srt, or hrt\n";
 		cin>>mode;
 		if(mode=="mfqs"){
-			mfqs(arr[0]);
+			mfqs(arr[0], arrCount);
 			select=true;
 		}
 		else if(mode=="srt"){
-			srt();
+			srt(arr, arrCount);
 			select=true;
 		}
 		else if(mode=="hrt"){
-			hrt();
+			hrt(arr, arrCount);
 			select=true;
 		}
 	}
@@ -120,7 +126,7 @@ int main(int argc, char** argv){
     return 0;
 }
 
-void mfqs(process raw){
+void mfqs(process raw, int arrCount){
 	int queues, quantum, age;
 
 	while(1){	
@@ -163,9 +169,9 @@ void mfqs(process raw){
 
 }
 
-void srt(){}
+void srt(process arr[], int arrCount){}
 
-void hrt(){}
+void hrt(process arr[], int arrCount){}
 
 void display(process proc){
 	cout << proc.pid << " " << proc.burst << " " << proc.arrival << " " << proc.priority << " " << proc.deadline << " " << proc.io << "\n";
@@ -176,7 +182,108 @@ void swap(process* a, process* b){
     *a = *b;
     *b = t;
 }
+
+void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum)
+{
+    // Make a copy of burst times bt[] to store remaining
+    // burst times.
+
+    int rem_bt[arrCount];
+    for (int i = 0 ; i < arrCount ; i++)
+        rem_bt[i] = arr[i].burst;
  
+    int t = 0; // Current time
+ 
+    // Keep traversing processes in round robin manner
+    // until all of them are not done.
+    while (1)
+    {
+        bool done = true;
+ 
+        // Traverse all processes one by one repeatedly
+        for (int i = 0 ; i < arrCount; i++)
+        {
+            // If burst time of a process is greater than 0
+            // then only need to process further
+            if (rem_bt[i] > 0)
+            {
+                done = false; // There is a pending process
+ 
+                if (rem_bt[i] > quantum)
+                {
+                    // Increase the value of t i.e. shows
+                    // how much time a process has been processed
+                    t += quantum;
+ 
+                    // Decrease the burst_time of current process
+                    // by quantum
+                    rem_bt[i] -= quantum;
+                }
+ 
+                // If burst time is smaller than or equal to
+                // quantum. Last cycle for this process
+                else
+                {
+                    // Increase the value of t i.e. shows
+                    // how much time a process has been processed
+                    t = t + rem_bt[i];
+ 
+                    // Waiting time is current time minus time
+                    // used by this process
+                    wt[i] = t - arr[i].burst;
+ 
+                    // As the process gets fully executed
+                    // make its remaining burst time = 0
+                    rem_bt[i] = 0;
+                }
+            }
+        }
+ 
+        // If all processes are done
+        if (done == true)
+        break;
+    }
+}
+
+// Function to calculate turn around time
+void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat[])
+{
+    // calculating turnaround time by adding
+    // bt[i] + wt[i]
+    for (int i = 0; i < arrCount ; i++)
+        tat[i] = arr[i].burst + wt[i];
+}
+
+void findavgTimeRoundRobin(process arr[], int arrCount, int quantum)
+{
+    int wt[arrCount], tat[arrCount], total_wt = 0, total_tat = 0;
+ 
+    // Function to find waiting time of all processes
+    findWaitingTimeRoundRobin(arr, arrCount, wt, quantum);
+ 
+    // Function to find turn around time for all processes
+    findTurnAroundTimeRoundRobin(arr, arrCount, wt, tat);
+ 
+    // Display processes along with all details
+    cout << "Processes "<< " Burst time "
+        << " Waiting time " << " Turn around time\n";
+ 
+    // Calculate total waiting time and total turn
+    // around time
+    for (int i=0; i<arrCount; i++)
+    {
+        total_wt = total_wt + wt[i];
+        total_tat = total_tat + tat[i];
+        cout << " " << i+1 << "\t\t" << arr[i].burst <<"\t "
+            << wt[i] <<"\t\t " << tat[i] <<endl;
+    }
+ 
+    cout << "Average waiting time = "
+        << (float)total_wt / (float)arrCount;
+    cout << "\nAverage turn around time = "
+        << (float)total_tat / (float)arrCount;
+}
+
 /* This function takes last element as pivot, places
    the pivot element at its correct position in sorted
     array, and places all smaller (smaller than pivot)

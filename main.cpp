@@ -83,7 +83,6 @@ int main(int argc, char** argv){
 		arr[i].deadline=n;
 		is >> n;
 		arr[i].io=n;
-		arrCount++;
 	}
 
 	commands.close();

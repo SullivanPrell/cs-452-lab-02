@@ -16,17 +16,19 @@ class process{
 		int deadline;
 		int io;
 		int queue;
-		process* next;
-		process* prev;
 		bool head;
 		bool tail;
+		process* next;
+		process* prev;
 };
+
+
 
 void mfqs(process raw, int arrCount);
 void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum);
 void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat[]);
 void findavgTimeRoundRobin(process arr[], int arrCount, int quantum);
-
+process findTail(process head);
 
 
 void srt(process arr[], int arrCount);
@@ -37,7 +39,6 @@ int partition (process arr[], int low, int high);
 void swap(process* a, process* b);
 
 int main(int argc, char** argv){
-	cout << "Size of a proc: " << sizeof (process)<<"\n";
 	int arrCount = 0;
 	
 	if(argc!=2){
@@ -90,6 +91,7 @@ int main(int argc, char** argv){
 	commands.close();
 
 	quickSort(arr,0,ProcNum-1);
+
 	arr[0].next=&arr[1];
 	arr[0].tail=false;
 	arr[0].head=true;
@@ -98,11 +100,12 @@ int main(int argc, char** argv){
 		arr[i].prev=&arr[i-1];
 		arr[i].head=false;
 		arr[i].tail=false;
-		display(arr[i]);
 	}
-	arr[ProcNum].prev=&arr[ProcNum-1];
-	arr[ProcNum].head=false;
-	arr[ProcNum].tail=true;
+	arr[ProcNum-1].prev=&arr[ProcNum-2];
+	arr[ProcNum-1].head=false;
+	arr[ProcNum-1].tail=true;
+
+	display(findTail(arr[0]));
 
 	bool select=false;
 	string mode="";
@@ -163,6 +166,11 @@ void mfqs(process raw, int arrCount){
 			break;
 		}
 	}
+	process heads[queues];
+	for(int i=0;i<queues-1;i++){
+		
+	
+	}
 
 
 }
@@ -172,7 +180,7 @@ void srt(process arr[], int arrCount){}
 void hrt(process arr[], int arrCount){}
 
 void display(process proc){
-	cout << proc.pid << " " << proc.burst << " " << proc.arrival << " " << proc.priority << " " << proc.deadline << " " << proc.io << "\n";
+	cout << proc.pid << " " << proc.burst << " " << proc.arrival << " " << proc.priority << " " << proc.deadline << " " << proc.io <<" Head - "<<proc.head <<" | Tail - "<<proc.tail << "\n";
 }
 
 void swap(process* a, process* b){
@@ -181,12 +189,20 @@ void swap(process* a, process* b){
     *b = t;
 }
 
+process findTail(process head){
+	while(!head.tail){
+		display(head);
+		head=*head.next;
+	}
+	return head;
+}
+
 void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum)
 {
     // Make a copy of burst times bt[] to store remaining
     // burst times.
 
-    int* rem_bt = new int[arrCount];
+    int rem_bt[arrCount];
     for (int i = 0 ; i < arrCount ; i++)
         rem_bt[i] = arr[i].burst;
  
@@ -254,9 +270,7 @@ void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat
 
 void findavgTimeRoundRobin(process arr[], int arrCount, int quantum)
 {
-    int* wt = new int[arrCount];
-	int* tat = new int[arrCount];
-	int total_wt = 0, total_tat = 0;
+    int wt[arrCount], tat[arrCount], total_wt = 0, total_tat = 0;
  
     // Function to find waiting time of all processes
     findWaitingTimeRoundRobin(arr, arrCount, wt, quantum);

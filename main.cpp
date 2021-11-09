@@ -31,8 +31,8 @@ void findavgTimeRoundRobin(process arr, int arrCount, int quantum);
 process findTail(process head);
 void doWork(process head);
 
-void srt(process arr[], int arrCount);
-void hrt(process arr[], int arrCount);
+void srt(process arr, int arrCount);
+void hrt(process arr, int arrCount);
 void display(process proc);
 void quickSort(process arr[], int low, int high);
 int partition (process arr[], int low, int high);
@@ -196,9 +196,9 @@ void doWork(process head){
 
 }
 
-void srt(process arr[], int arrCount){}
+void srt(process arr, int arrCount){}
 
-void hrt(process arr[], int arrCount){}
+void hrt(process arr, int arrCount){}
 
 void display(process proc){
 	cout << proc.pid << " " << proc.burst << " " << proc.arrival << " " << proc.priority << " " << proc.deadline << " " << proc.io <<" Head - "<<proc.head <<" | Tail - "<<proc.tail << "\n";

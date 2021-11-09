@@ -29,7 +29,7 @@ void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum)
 void findTurnAroundTimeRoundRobin(process arr, int arrCount, int wt[], int tat[]);
 void findavgTimeRoundRobin(process arr, int arrCount, int quantum);
 process findTail(process head);
-
+void doWork(process head);
 
 void srt(process arr[], int arrCount);
 void hrt(process arr[], int arrCount);
@@ -67,8 +67,7 @@ int main(int argc, char** argv){
 	process* arr=new process[ProcNum];
 	printf("Arr made\n");
 
-	for(int i=1;i<ProcNum;i++){
-		
+	for(int i=1;i<ProcNum;i++){	
 		line="";
 		getline(commands,line);
 		stringstream is(line);
@@ -166,12 +165,34 @@ void mfqs(process raw, int arrCount){
 			break;
 		}
 	}
-	process* heads = new process[queues];
-	for(int i=0;i<queues-1;i++){
+	process heads[queues];
+	bool done=false;
+	int tick=0;
+	int prog;
+	while(!done){
+		for(prog=0;prog<quantum;prog++){
+			while(raw.arrival==tick){
+				heads[0]=raw;
+				raw=*raw.next;
+				raw.head=true;
+			}
+			doWork(heads[0]);
+			if(heads[0].burst==0){
+				break;
+			}
+		}
+		if(heads[0].burst==0){
+			heads[0]=*heads[0].next;
+		}else{
+			
 		
-	
+		}
 	}
 
+}
+
+void doWork(process head){
+	head.burst--;
 
 }
 
@@ -191,7 +212,6 @@ void swap(process* a, process* b){
 
 process findTail(process head){
 	while(!head.tail){
-		display(head);
 		head=*head.next;
 	}
 	return head;

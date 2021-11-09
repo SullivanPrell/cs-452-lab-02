@@ -39,7 +39,6 @@ int partition (process arr[], int low, int high);
 void swap(process* a, process* b);
 
 int main(int argc, char** argv){
-	int arrCount = 0;
 	
 	if(argc!=2){
 		printf("Incorrect parameter number\n");
@@ -112,15 +111,15 @@ int main(int argc, char** argv){
 		cout<< "Select mfqs, srt, or hrt\n";
 		cin>>mode;
 		if(mode=="mfqs"){
-			mfqs(arr[0], arrCount);
+			mfqs(arr[0], ProcNum);
 			select=true;
 		}
 		else if(mode=="srt"){
-			srt(arr[0], arrCount);
+			srt(arr[0], ProcNum);
 			select=true;
 		}
 		else if(mode=="hrt"){
-			hrt(arr[0], arrCount);
+			hrt(arr[0], ProcNum);
 			select=true;
 		}
 	}

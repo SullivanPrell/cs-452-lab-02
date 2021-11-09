@@ -25,9 +25,9 @@ class process{
 
 
 void mfqs(process raw, int arrCount);
-void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum);
-void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat[]);
-void findavgTimeRoundRobin(process arr[], int arrCount, int quantum);
+void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum);
+void findTurnAroundTimeRoundRobin(process arr, int arrCount, int wt[], int tat[]);
+void findavgTimeRoundRobin(process arr, int arrCount, int quantum);
 process findTail(process head);
 
 
@@ -166,7 +166,7 @@ void mfqs(process raw, int arrCount){
 			break;
 		}
 	}
-	process heads[queues];
+	process* heads = new process[queues];
 	for(int i=0;i<queues-1;i++){
 		
 	
@@ -197,14 +197,15 @@ process findTail(process head){
 	return head;
 }
 
-void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum)
+void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum)
 {
     // Make a copy of burst times bt[] to store remaining
     // burst times.
 
-    int rem_bt[arrCount];
+    int* rem_bt = new int[arrCount];
     for (int i = 0 ; i < arrCount ; i++)
-        rem_bt[i] = arr[i].burst;
+        rem_bt[i] = arr.burst;
+		arr = *arr.next;
  
     int t = 0; // Current time
  
@@ -244,13 +245,14 @@ void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantu
  
                     // Waiting time is current time minus time
                     // used by this process
-                    wt[i] = t - arr[i].burst;
+                    wt[i] = t - arr.burst;
  
                     // As the process gets fully executed
                     // make its remaining burst time = 0
                     rem_bt[i] = 0;
                 }
             }
+			arr = *arr.next;
         }
  
         // If all processes are done
@@ -260,17 +262,20 @@ void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantu
 }
 
 // Function to calculate turn around time
-void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat[])
+void findTurnAroundTimeRoundRobin(process arr, int arrCount, int wt[], int tat[])
 {
     // calculating turnaround time by adding
     // bt[i] + wt[i]
     for (int i = 0; i < arrCount ; i++)
-        tat[i] = arr[i].burst + wt[i];
+        tat[i] = arr.burst + wt[i];
+		arr = *arr.next;
 }
 
-void findavgTimeRoundRobin(process arr[], int arrCount, int quantum)
+void findavgTimeRoundRobin(process arr, int arrCount, int quantum)
 {
-    int wt[arrCount], tat[arrCount], total_wt = 0, total_tat = 0;
+    int* wt = new int[arrCount];
+	int* tat = new int[arrCount];
+	int total_wt = 0, total_tat = 0;
  
     // Function to find waiting time of all processes
     findWaitingTimeRoundRobin(arr, arrCount, wt, quantum);
@@ -288,8 +293,9 @@ void findavgTimeRoundRobin(process arr[], int arrCount, int quantum)
     {
         total_wt = total_wt + wt[i];
         total_tat = total_tat + tat[i];
-        cout << " " << i+1 << "\t\t" << arr[i].burst <<"\t "
+        cout << " " << i+1 << "\t\t" << arr.burst <<"\t "
             << wt[i] <<"\t\t " << tat[i] <<endl;
+		arr = *arr.next;
     }
  
     cout << "Average waiting time = "

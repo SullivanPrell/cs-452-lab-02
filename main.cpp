@@ -116,11 +116,11 @@ int main(int argc, char** argv){
 			select=true;
 		}
 		else if(mode=="srt"){
-			srt(arr, arrCount);
+			srt(arr[0], arrCount);
 			select=true;
 		}
 		else if(mode=="hrt"){
-			hrt(arr, arrCount);
+			hrt(arr[0], arrCount);
 			select=true;
 		}
 	}

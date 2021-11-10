@@ -153,6 +153,33 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\main.cpp.s
 .PHONY : main.cpp.s
 
+queue.obj: queue.cpp.obj
+
+.PHONY : queue.obj
+
+# target to build an object file
+queue.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\queue.cpp.obj
+.PHONY : queue.cpp.obj
+
+queue.i: queue.cpp.i
+
+.PHONY : queue.i
+
+# target to preprocess a source file
+queue.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\queue.cpp.i
+.PHONY : queue.cpp.i
+
+queue.s: queue.cpp.s
+
+.PHONY : queue.s
+
+# target to generate assembly for a file
+queue.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\queue.cpp.s
+.PHONY : queue.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -165,6 +192,9 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... queue.obj
+	@echo ... queue.i
+	@echo ... queue.s
 .PHONY : help
 
 

@@ -167,7 +167,7 @@ void mfqs(process raw, int arrCount) {
             break;
         }
     }
-    process heads[queues];
+    process* heads = new process[queues];
     bool done = false;
     int tick = 0;
     int prog;

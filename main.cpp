@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     printf("Arr made\n");
 
     for (int i = 1; i < ProcNum; i++) {
-        line = strings.get(i);
+        line = strings[i];
         stringstream is(line);
         int n;
         is >> n;

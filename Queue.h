@@ -4,7 +4,7 @@
 #define CS_452_LAB_02_QUEUE_H
 
 
-struct QueueNode {
+class QueueNode {
     process data;
     QueueNode *next;
 
@@ -14,7 +14,7 @@ struct QueueNode {
     }
 };
 
-struct Queue {
+class Queue {
     void enQueue(process x);
     void deQueue();
     QueueNode *head, *tail;

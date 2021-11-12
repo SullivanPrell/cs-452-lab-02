@@ -1,20 +1,21 @@
 #include <iostream>
+#include "process.h"
 #ifndef CS_452_LAB_02_QUEUE_H
 #define CS_452_LAB_02_QUEUE_H
 
 
 struct QueueNode {
-    int data;
+    process data;
     QueueNode *next;
 
-    explicit QueueNode(int d) {
+    explicit QueueNode(process d) {
         data = d;
         next = nullptr;
     }
 };
 
 struct Queue {
-    void enQueue(int x);
+    void enQueue(process x);
     void deQueue();
     QueueNode *head, *tail;
 

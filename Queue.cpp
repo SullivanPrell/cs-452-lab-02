@@ -8,7 +8,7 @@
 using namespace std;
 
 
-void Queue::enQueue(int x) {
+void Queue::enQueue(process x) {
 
     // Create a new LL node
     QueueNode *temp = new QueueNode(x);

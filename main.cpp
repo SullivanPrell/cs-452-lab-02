@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     }
 
     ifstream inputFile{argv[1]};
-	vector<String> strings;
+	vector<string> strings;
 
     string line;
     int ProcNum = 0;

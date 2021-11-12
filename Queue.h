@@ -5,8 +5,9 @@
 
 
 class QueueNode {
-    process data;
-    QueueNode *next;
+    public:
+        process data;
+        QueueNode *next;
 
     explicit QueueNode(process d) {
         data = d;
@@ -15,9 +16,10 @@ class QueueNode {
 };
 
 class Queue {
-    void enQueue(process x);
-    void deQueue();
-    QueueNode *head, *tail;
+    public:
+        void enQueue(process x);
+        void deQueue();
+        QueueNode *head, *tail;
 
     Queue() {
         head = tail = nullptr;

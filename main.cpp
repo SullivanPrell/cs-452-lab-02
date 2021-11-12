@@ -5,7 +5,7 @@
 #include <sstream>
 #include "Queue.h"
 #include "process.h"
-
+#include <vector>
 using namespace std;
 
 void mfqs(process raw, int arrCount);
@@ -143,7 +143,7 @@ void hrt(process arr, int arrCount) {}
 
 void display(process proc) {
     cout << proc.pid << " " << proc.burst << " " << proc.arrival << " " << proc.priority << " " << proc.deadline << " "
-         << proc.io << " Head - " << proc.head << " | Tail - " << proc.tail << "\n";
+         << proc.io << "\n";
 }
 
 void swap(process *a, process *b) {

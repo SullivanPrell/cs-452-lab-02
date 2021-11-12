@@ -46,3 +46,13 @@ void Queue::deQueue() {
     delete (temp);
 }
 
+process Queue::peekQueue() {
+    return head->data;
+}
+
+process Queue::popQueue() {
+    process returnProcess = peekQueue();
+    deQueue();
+    return returnProcess;
+}
+

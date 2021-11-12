@@ -7,13 +7,14 @@
 #include <iostream>
 
 class process {
-    int pid;
-    int burst;
-    int arrival;
-    int priority;
-    int deadline;
-    int io;
-    int queue;
+    public:
+        int pid;
+        int burst;
+        int arrival;
+        int priority;
+        int deadline;
+        int io;
+        int queue;
 };
 
 

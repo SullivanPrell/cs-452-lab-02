@@ -19,6 +19,8 @@ class Queue {
     public:
         void enQueue(process x);
         void deQueue();
+        process peekQueue();
+        process popQueue();
         QueueNode *head, *tail;
 
     Queue() {

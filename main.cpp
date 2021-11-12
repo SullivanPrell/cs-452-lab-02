@@ -40,29 +40,25 @@ int main(int argc, char **argv) {
     }
 
     ifstream inputFile{argv[1]};
-    ofstream outputFile{"cmd.txt"};
+	vector<String> strings;
 
     string line;
     int ProcNum = 0;
     while (getline(inputFile, line)) {
         if (line.find('-') > line.length() && line.find('P') > line.length()) {
-            outputFile << line << "\n";
+            strings.push_back(line);
             ProcNum++;
         }
-        outputFile.flush();
     }
 
     //Closing file
     inputFile.close();
-    outputFile.close();
 
-    ifstream commands{"cmd.txt"};
     process *arr = new process[ProcNum];
     printf("Arr made\n");
 
     for (int i = 1; i < ProcNum; i++) {
-        line = "";
-        getline(commands, line);
+        line = strings.get(i);
         stringstream is(line);
         int n;
         is >> n;
@@ -78,25 +74,6 @@ int main(int argc, char **argv) {
         is >> n;
         arr[i].io = n;
     }
-
-    commands.close();
-
-    quickSort(arr, 0, ProcNum - 1);
-
-    arr[0].next = &arr[1];
-    arr[0].tail = false;
-    arr[0].head = true;
-    for (int i = 1; i < ProcNum - 1; i++) {
-        arr[i].next = &arr[i + 1];
-        arr[i].prev = &arr[i - 1];
-        arr[i].head = false;
-        arr[i].tail = false;
-    }
-    arr[ProcNum - 1].prev = &arr[ProcNum - 2];
-    arr[ProcNum - 1].head = false;
-    arr[ProcNum - 1].tail = true;
-
-    display(findTail(arr[0]));
 
     bool select = false;
     string mode = "";
@@ -152,29 +129,6 @@ void mfqs(process raw, int arrCount) {
             break;
         }
     }
-    process* heads = new process[queues];
-    bool done = false;
-    int tick = 0;
-    int prog;
-    while (!done) {
-        for (prog = 0; prog < quantum; prog++) {
-            while (raw.arrival == tick) {
-                heads[0] = raw;
-                raw = *raw.next;
-                raw.head = true;
-            }
-            doWork(heads[0]);
-            if (heads[0].burst == 0) {
-                break;
-            }
-        }
-        if (heads[0].burst == 0) {
-            heads[0] = *heads[0].next;
-        } else {
-
-
-        }
-    }
 
 }
 
@@ -198,12 +152,6 @@ void swap(process *a, process *b) {
     *b = t;
 }
 
-process findTail(process head) {
-    while (!head.tail) {
-        head = *head.next;
-    }
-    return head;
-}
 
 void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum) {
     // Make a copy of burst times bt[] to store remaining

@@ -4,25 +4,9 @@
 #include <limits>
 #include <sstream>
 #include "Queue.h"
+#include "process.h"
 
 using namespace std;
-
-
-class process {
-public:
-    int pid;
-    int burst;
-    int arrival;
-    int priority;
-    int deadline;
-    int io;
-    int queue;
-    bool head;
-    bool tail;
-    process *next;
-    process *prev;
-};
-
 
 void mfqs(process raw, int arrCount);
 

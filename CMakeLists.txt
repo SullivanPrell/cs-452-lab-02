@@ -3,4 +3,4 @@ project(cs_452_lab_02)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(cs_452_lab_02 main.cpp Queue.cpp Queue.h)
+add_executable(cs_452_lab_02 main.cpp Queue.cpp Queue.h process.cpp process.h)

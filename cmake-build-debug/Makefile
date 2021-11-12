@@ -180,6 +180,33 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\main.cpp.s
 .PHONY : main.cpp.s
 
+process.obj: process.cpp.obj
+
+.PHONY : process.obj
+
+# target to build an object file
+process.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\process.cpp.obj
+.PHONY : process.cpp.obj
+
+process.i: process.cpp.i
+
+.PHONY : process.i
+
+# target to preprocess a source file
+process.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\process.cpp.i
+.PHONY : process.cpp.i
+
+process.s: process.cpp.s
+
+.PHONY : process.s
+
+# target to generate assembly for a file
+process.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\process.cpp.s
+.PHONY : process.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -195,6 +222,9 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... process.obj
+	@echo ... process.i
+	@echo ... process.s
 .PHONY : help
 
 

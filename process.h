@@ -4,9 +4,9 @@
 
 #ifndef CS_452_LAB_02_PROCESS_H
 #define CS_452_LAB_02_PROCESS_H
+#include <iostream>
 
-
-struct process {
+class process {
     int pid;
     int burst;
     int arrival;

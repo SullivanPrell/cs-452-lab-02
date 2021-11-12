@@ -126,6 +126,33 @@ cs_452_lab_02\fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\build
 .PHONY : cs_452_lab_02\fast
 
+Queue.obj: Queue.cpp.obj
+
+.PHONY : Queue.obj
+
+# target to build an object file
+Queue.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\Queue.cpp.obj
+.PHONY : Queue.cpp.obj
+
+Queue.i: Queue.cpp.i
+
+.PHONY : Queue.i
+
+# target to preprocess a source file
+Queue.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\Queue.cpp.i
+.PHONY : Queue.cpp.i
+
+Queue.s: Queue.cpp.s
+
+.PHONY : Queue.s
+
+# target to generate assembly for a file
+Queue.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\Queue.cpp.s
+.PHONY : Queue.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -153,33 +180,6 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\main.cpp.s
 .PHONY : main.cpp.s
 
-queue.obj: queue.cpp.obj
-
-.PHONY : queue.obj
-
-# target to build an object file
-queue.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\queue.cpp.obj
-.PHONY : queue.cpp.obj
-
-queue.i: queue.cpp.i
-
-.PHONY : queue.i
-
-# target to preprocess a source file
-queue.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\queue.cpp.i
-.PHONY : queue.cpp.i
-
-queue.s: queue.cpp.s
-
-.PHONY : queue.s
-
-# target to generate assembly for a file
-queue.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\queue.cpp.s
-.PHONY : queue.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -189,12 +189,12 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... cs_452_lab_02
+	@echo ... Queue.obj
+	@echo ... Queue.i
+	@echo ... Queue.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
-	@echo ... queue.obj
-	@echo ... queue.i
-	@echo ... queue.s
 .PHONY : help
 
 

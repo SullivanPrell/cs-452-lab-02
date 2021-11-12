@@ -3,6 +3,7 @@
 #include <string>
 #include <limits>
 #include <sstream>
+#include "Queue.h"
 
 using namespace std;
 
@@ -48,6 +49,18 @@ int partition(process arr[], int low, int high);
 void swap(process *a, process *b);
 
 int main(int argc, char **argv) {
+
+    Queue q;
+    q.enQueue(10);
+    q.enQueue(20);
+    q.deQueue();
+    q.deQueue();
+    q.enQueue(30);
+    q.enQueue(40);
+    q.enQueue(50);
+    q.deQueue();
+    cout << "Queue Front : " << (q.head)->data << endl;
+    cout << "Queue Rear : " << (q.tail)->data;
 
     if (argc != 2) {
         printf("Incorrect parameter number\n");

@@ -84,10 +84,10 @@ int main(int argc, char **argv) {
             mfqs(arr[0], ProcNum);
             select = true;
         } else if (mode == "srt") {
-            srt(arr[0], ProcNum);
+            srt(arr, ProcNum);
             select = true;
         } else if (mode == "hrt") {
-            hrt(arr[0], ProcNum);
+            hrt(arr, ProcNum);
             select = true;
         }
     }

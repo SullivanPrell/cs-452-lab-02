@@ -50,6 +50,26 @@ process Queue::peekQueue() {
     return head->data;
 }
 
+void Queue::deincrement(){
+	head->data.burst--;
+}
+
+void Queue::age(){
+	head->data.age++;
+}
+
+void Queue::setAge(int val){
+	head->data.age=val;
+}
+
+void Queue::doWork(){
+	head->data.worked++;
+}
+
+void Queue::setWork(int val){
+	head->data.worked=val;
+}
+
 process Queue::popQueue() {
     process returnProcess = peekQueue();
     deQueue();

@@ -249,7 +249,7 @@ void findavgTimeRoundRobin(process arr[], int arrCount, int quantum) {
     cout << "Average waiting time = "
          << (float) total_wt / (float) arrCount;
     cout << "\nAverage turn around time = "
-         << (float) total_tat / (float) arrCount;
+         << (float) total_tat / (float) arrCount << "\n";
 }
 
 /* This function takes last element as pivot, places

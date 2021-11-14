@@ -20,9 +20,9 @@ process findTail(process head);
 
 void doWork(process head);
 
-void srt(process arr, int arrCount);
+void srt(process arr[], int arrCount);
 
-void hrt(process arr, int arrCount);
+void hrt(process arr[], int arrCount);
 
 void display(process proc);
 

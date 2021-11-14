@@ -10,11 +10,11 @@ using namespace std;
 
 void mfqs(process raw, int arrCount);
 
-void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum);
+void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum);
 
-void findTurnAroundTimeRoundRobin(process arr, int arrCount, int wt[], int tat[]);
+void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat[]);
 
-void findavgTimeRoundRobin(process arr, int arrCount, int quantum);
+void findavgTimeRoundRobin(process arr[], int arrCount, int quantum);
 
 process findTail(process head);
 
@@ -134,12 +134,17 @@ void mfqs(process raw, int arrCount) {
 
 void doWork(process head) {
     head.burst--;
-
 }
 
-void srt(process arr, int arrCount) {}
+void srt(process arr[], int arrCount) {
+    int time;
+    cout << "What would you like the time quantum to be?\n";
+        cin >> time;
+    cout << "Starting soft real time round robin:\n";
+    findavgTimeRoundRobin(arr, arrCount, time);
+}
 
-void hrt(process arr, int arrCount) {}
+void hrt(process arr[], int arrCount) {}
 
 void display(process proc) {
     cout << proc.pid << " " << proc.burst << " " << proc.arrival << " " << proc.priority << " " << proc.deadline << " "
@@ -153,13 +158,13 @@ void swap(process *a, process *b) {
 }
 
 
-void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum) {
+void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum) {
     // Make a copy of burst times bt[] to store remaining
     // burst times.
 
     int *rem_bt = new int[arrCount];
     for (int i = 0; i < arrCount; i++)
-        rem_bt[i] = arr.burst;
+        rem_bt[i] = arr[i].burst;
 
     int t = 0; // Current time
 
@@ -194,7 +199,7 @@ void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum)
 
                     // Waiting time is current time minus time
                     // used by this process
-                    wt[i] = t - arr.burst;
+                    wt[i] = t - arr[i].burst;
 
                     // As the process gets fully executed
                     // make its remaining burst time = 0
@@ -210,14 +215,14 @@ void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum)
 }
 
 // Function to calculate turn around time
-void findTurnAroundTimeRoundRobin(process arr, int arrCount, int wt[], int tat[]) {
+void findTurnAroundTimeRoundRobin(process arr[], int arrCount, int wt[], int tat[]) {
     // calculating turnaround time by adding
     // bt[i] + wt[i]
     for (int i = 0; i < arrCount; i++)
-        tat[i] = arr.burst + wt[i];
+        tat[i] = arr[i].burst + wt[i];
 }
 
-void findavgTimeRoundRobin(process arr, int arrCount, int quantum) {
+void findavgTimeRoundRobin(process arr[], int arrCount, int quantum) {
     int *wt = new int[arrCount];
     int *tat = new int[arrCount];
     int total_wt = 0, total_tat = 0;
@@ -237,7 +242,7 @@ void findavgTimeRoundRobin(process arr, int arrCount, int quantum) {
     for (int i = 0; i < arrCount; i++) {
         total_wt = total_wt + wt[i];
         total_tat = total_tat + tat[i];
-        cout << " " << i + 1 << "\t\t" << arr.burst << "\t "
+        cout << " " << i + 1 << "\t\t" << arr[i].burst << "\t "
              << wt[i] << "\t\t " << tat[i] << endl;
     }
 

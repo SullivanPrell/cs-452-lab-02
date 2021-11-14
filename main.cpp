@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
     process *arr = new process[ProcNum];
     printf("Arr made\n");
 
-    for (int i = 1; i < ProcNum; i++) {
+    for (int i = 0; i < ProcNum; i++) {
         line = strings[i];
         stringstream is(line);
         int n;
@@ -74,6 +74,7 @@ int main(int argc, char **argv) {
         is >> n;
         arr[i].io = n;
     }
+    quickSort(arr, 0, ProcNum-1);
 
     bool select = false;
     string mode = "";

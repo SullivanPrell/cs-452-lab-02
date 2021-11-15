@@ -8,6 +8,7 @@
 #include <vector>
 #include <stdio.h>
 #include <math.h>
+#include <algorithm>
 using namespace std;
 
 void mfqs(Queue raw, int arrCount);
@@ -34,6 +35,8 @@ int partition(process arr[], int low, int high);
 
 void swap(process *a, process *b);
 
+void supersort(vector<process> prioritySort);
+
 int main(int argc, char **argv) {
 
     if (argc != 2) {
@@ -54,16 +57,6 @@ int main(int argc, char **argv) {
         }
     }
 	
-/*
-	while(ProcNum<10){
-		getline(inputFile, line); 
-        if (line.find('-') > line.length() && line.find('P') > line.length()) {
-            strings.push_back(line);
-            ProcNum++;
-        }
-    }
-*/
-    //Closing file
     inputFile.close();
 
     process *arr = new process[ProcNum];
@@ -91,7 +84,7 @@ int main(int argc, char **argv) {
 
 	quickSort(arr,0,ProcNum-1);
 
-
+	
     bool select = false;
     string mode = "mfqs";
     while (!select) {
@@ -112,15 +105,15 @@ int main(int argc, char **argv) {
             select = true;
         }
     }
-
-    cout << "Terminated Cleanly with " << ProcNum << " processes scheduled \n";
+	
+    //cout << "Terminated Cleanly with " << ProcNum << " processes scheduled \n";
     return 0;
 }
 
 void mfqs(Queue prime, int arrCount) {
     int queues=5;
 	int quantum=4; 
-	int age=5;
+	int age=500;
 	/*
     while (1) {
         cout << "How many queues will be generated\n";
@@ -162,20 +155,39 @@ void mfqs(Queue prime, int arrCount) {
 	int queued=0;
 	int modQuantum;
 	printf("We have %d procs\n",arrCount);
+	vector<process> prioritySort;
 
 	while(1){
 		//checks to see if everything is queued. if not it adds all items that have arrived
 		//at the current clock tick
-		if(queued<arrCount){
+		
+		/*if(queued<arrCount){
 			while(queued<arrCount&&prime.peekQueue().arrival==clocktick){
 				process tmp=prime.popQueue();
 				things[0].enQueue(tmp);
 				queued++;
 			}
+		}*/
+
+		if(queued<arrCount){
+			while(queued<arrCount&&prime.peekQueue().arrival==clocktick){
+				process tmp=prime.popQueue();
+				queued++;
+				prioritySort.push_back(tmp);
+			}
+			supersort(prioritySort);
+			if(prioritySort.size()>0){
+				for(int a=0;a<prioritySort.size();a++){
+					things[0].enQueue(prioritySort.at(a));
+				}
+			}
+			prioritySort.clear();
 		}
+
+
 		//determines the first queue to have contents
 		for(i=0;i<queues;i++){
-			if(things[i].head!=nullptr){
+			if(things[i].checkReal()){
 				break;
 			}
 		}
@@ -207,23 +219,31 @@ void mfqs(Queue prime, int arrCount) {
 			printf("Process %d terminated in queue %d\n",tmp.pid,i+1);
 			
 		}
-		else if(things[i].peekQueue().worked==modQuantum&&i<queues-1){
+		else if(things[i].peekQueue().worked==modQuantum&&i<queues-2){
 			process tmp=things[i].popQueue();
-			//printf("%d demoted to %d\n",tmp.pid,i+1);
 			tmp.worked=0;
 			things[i+1].enQueue(tmp);
-			//workDone=0;
 		}
-		else if(i==queues-1){
-			if(things[i].peekQueue().age==age){
-				process tmp=things[i].popQueue();
-				tmp.age=0;
-				printf("%d promoted\n",tmp.pid);
-				things[i-1].enQueue(tmp);
+		else if(things[i].peekQueue().worked==modQuantum&&i==queues-2){
+			process tmp=things[i].popQueue();
+			tmp.worked=0;
+			prioritySort.push_back(tmp);
+		}
+
+		things[queues-1].ageQueue();
+		
+		while(things[queues-1].checkReal()&&things[queues-1].peekQueue().age==age){
+			process tmp=things[queues-1].popQueue();
+			tmp.age=0;
+			prioritySort.push_back(tmp);
+		}
+
+		supersort(prioritySort);
+		if(prioritySort.size()>0){
+			for(int a=0;a<prioritySort.size();a++){
+				things[queues-2].enQueue(prioritySort.at(a));
 			}
-			else{
-				things[i].age();
-			}
+			prioritySort.clear();
 		}
 		clocktick++;
 		if(procDone==arrCount){
@@ -380,4 +400,12 @@ void quickSort(process arr[], int low, int high) {
         quickSort(arr, low, pi - 1);
         quickSort(arr, pi + 1, high);
     }
+}
+
+void supersort(vector<process> prioritySort){
+	if(prioritySort.size()>1){		
+		sort(prioritySort.begin(),prioritySort.end(),[](const process& lhs, const process& rhs){
+			return lhs.priority<rhs.priority;
+		});
+	}
 }

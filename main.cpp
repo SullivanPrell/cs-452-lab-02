@@ -146,7 +146,7 @@ void mfqs(Queue prime, int arrCount) {
         }
     }*/
 	
-	Queue things[queues];
+	Queue* things = new Queue[queues];
 	int clocktick=0;
 	int workDone=0;
 	int i=0;

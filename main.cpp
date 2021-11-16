@@ -24,6 +24,8 @@ int partition(vector<process> arr, int low, int high);
 
 void swap(process *a, process *b);
 
+void display(process proc);
+
 void supersort(vector<process> prioritySort);
 
 void theory(Queue prime, int ProcNum);
@@ -66,13 +68,14 @@ int main(int argc, char **argv) {
             fileIn >> rawString; //IO
             parsedInt = std::stoi(rawString);
             tempProcess.io = parsedInt;
-            if (tempProcess.pid < 0 && tempProcess.burst < 0 && tempProcess.arrival <= 0 && tempProcess.deadline < 0 &&
-                tempProcess.io < 0 && tempProcess.priority < 0) {
+            if (tempProcess.pid < 0 || tempProcess.burst < 0 || tempProcess.arrival <= 0 || tempProcess.deadline < 0 ||
+                tempProcess.io < 0 || tempProcess.priority < 0) {
                 //ignore
             } else {
                 tempProcess.age = 0;
                 tempProcess.queue = 0;
                 tempProcess.worked = 0;
+				display(tempProcess);
                 processes.push_back(tempProcess);
             }
 
@@ -87,6 +90,7 @@ int main(int argc, char **argv) {
         ++numProcess;
     }
     fileIn.close();
+	numProcess-=2;
 
     bool select = false;
     string mode;
@@ -94,7 +98,11 @@ int main(int argc, char **argv) {
         cout << "Select mfqs, srt, or hrt\n";
         cin >> mode;
         if (mode == "mfqs") {
+		sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
+                return lhs.arrival < rhs.arrival;
+            });
             Queue prime;
+
             for (int i = 0; i < numProcess; i++) {
                 prime.enQueue(processes[i]);
             }
@@ -411,7 +419,7 @@ void theory(Queue prime, int arrCount) {
     int queues = 5;
     int quantum = 4;
     int age = 50;
-    int ioTime = 10;
+    int ioTime = 1;
     /*
         while (1) {
             cout << "How many queues will be generated\n";

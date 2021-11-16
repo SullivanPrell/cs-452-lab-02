@@ -90,6 +90,7 @@ int main(int argc, char **argv) {
         ++numProcess;
     }
     fileIn.close();
+	numProcess-=2;
 
     bool select = false;
     string mode;
@@ -101,7 +102,6 @@ int main(int argc, char **argv) {
                 return lhs.arrival < rhs.arrival;
             });
             Queue prime;
-			numProcess-=2;
 
             for (int i = 0; i < numProcess; i++) {
                 prime.enQueue(processes[i]);

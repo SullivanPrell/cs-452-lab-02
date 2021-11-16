@@ -70,6 +70,9 @@ int main(int argc, char **argv) {
                 tempProcess.io < 0 && tempProcess.priority < 0) {
                 //ignore
             } else {
+                tempProcess.age = 0;
+                tempProcess.queue = 0;
+                tempProcess.worked = 0;
                 processes.push_back(tempProcess);
             }
 

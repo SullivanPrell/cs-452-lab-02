@@ -62,8 +62,13 @@ int main(int argc, char **argv) {
             fileIn >> rawString; //IO
             parsedInt = std::stoi(rawString);
             tempProcess.io = parsedInt;
+            if (tempProcess.pid < 0 || tempProcess.burst < 0 || tempProcess.arrival < 0 || tempProcess.deadline < 0 ||
+                tempProcess.io < 0 || tempProcess.priority < 0) {
+                //ignore
+            } else {
+                processes.push_back(tempProcess);
+            }
 
-            processes.push_back(tempProcess);
         } else {
             fileIn >> rawString;
             fileIn >> rawString;

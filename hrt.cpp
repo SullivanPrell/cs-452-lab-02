@@ -3,13 +3,7 @@
 //
 
 #include "hrt.h"
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <limits>
-#include <sstream>
 #include "Queue.h"
-#include "process.h"
 #include <vector>
 #include <algorithm>
 
@@ -33,16 +27,35 @@ void hrt::performHardRealTime(std::vector<process> processes, int numProcess) {
             allProcessesComplete = true;
         } else {
             currentProcess = processes[processesComplete + deadProcesses];
-            if (currentProcess.arrival == tickCount) {
+            if (currentProcess.arrival == tickCount ||
+                (currentProcess.arrival < tickCount && currentProcess.deadline < tickCount)) {
+                // On arrival or past arrival BUT before deadline
                 // Do work
+                if (currentProcess.io > 0) {
+                    // Handle I/O
+                    //TODO: How to handle I/O
+                } else {
+                    // No I/O
+                    if (currentProcess.deadline <= tickCount + currentProcess.burst) {
+                        tickCount += currentProcess.burst;
+                        processesComplete++;
+                        continue;
+                    } else {
+                        tickCount++;
+                        continue;
+                    }
+                }
             } else if (currentProcess.arrival < tickCount) {
                 // Waiting
+                tickCount++;
+                continue;
             } else if (currentProcess.arrival > tickCount && currentProcess.deadline > tickCount) {
                 // Dead Process
-            } else if(currentProcess.arrival > tickCount && currentProcess.deadline < tickCount) {
-                // Past arrival before deadline preform work
+                deadProcesses++;
+                tickCount++;
+                //TODO: how do we deal with this?
+                continue;
             }
         }
-
     }
 }

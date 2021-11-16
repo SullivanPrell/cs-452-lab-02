@@ -28,6 +28,7 @@ class Queue {
 		void setWork(int val);
 		void ageQueue();
 		bool checkReal();
+		void execIO();
         QueueNode *head, *tail;
 
     Queue() {

@@ -78,6 +78,14 @@ void Queue::ageQueue(){
 	}
 }
 
+void Queue::execIO(){
+	QueueNode *cur=head;
+	while(cur!=nullptr){
+		cur->data.io--;
+		cur=cur->next;
+	}
+}
+
 bool Queue::checkReal(){
 	if(head==nullptr){
 		return false;

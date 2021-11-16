@@ -12,30 +12,19 @@
 using namespace std;
 
 void mfqs(Queue raw, int arrCount);
-
 void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum);
-
 void findTurnAroundTimeRoundRobin(process arr, int arrCount, int wt[], int tat[]);
-
 void findavgTimeRoundRobin(process arr, int arrCount, int quantum);
-
 process findTail(process head);
-
 void doWork(process head);
-
 void srt(process arr, int arrCount);
-
 void hrt(process arr, int arrCount);
-
 void display(process proc);
-
 void quickSort(process arr[], int low, int high);
-
 int partition(process arr[], int low, int high);
-
 void swap(process *a, process *b);
-
 void supersort(vector<process> prioritySort);
+void theory(Queue prime, int ProcNum);
 
 int main(int argc, char **argv) {
 
@@ -78,10 +67,9 @@ int main(int argc, char **argv) {
         is >> n;
         arr[i].io = n;
 		arr[i].age=0;
+		arr[i].queue=0;
+		arr[i].worked=0;
     }
-
-
-
 	quickSort(arr,0,ProcNum-1);
 
 	
@@ -95,7 +83,7 @@ int main(int argc, char **argv) {
 			for(int i=0;i<ProcNum;i++){
 				prime.enQueue(arr[i]);
 			}
-            mfqs(prime, ProcNum);
+            theory(prime, ProcNum);
             select = true;
         } else if (mode == "srt") {
             srt(arr[0], ProcNum);
@@ -106,157 +94,15 @@ int main(int argc, char **argv) {
         }
     }
 	
-    //cout << "Terminated Cleanly with " << ProcNum << " processes scheduled \n";
+    cout << "Terminated Cleanly with " << ProcNum << " processes scheduled \n";
     return 0;
 }
 
-void mfqs(Queue prime, int arrCount) {
-    int queues=5;
-	int quantum=4; 
-	int age=500;
-	/*
-    while (1) {
-        cout << "How many queues will be generated\n";
-        cin >> queues;
-        if (cin.fail() || queues < 2 || queues > 5) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        } else {
-            break;
-        }
-    }
-    while (1) {
-        cout << "What is the time quantum\n";
-        cin >> quantum;
-        if (cin.fail() || quantum < 1) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        } else {
-            break;
-        }
-    }
-    while (1) {
-        cout << "How long should processes take to age up\n";
-        cin >> age;
-        if (cin.fail() || age < 1) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        } else {
-            break;
-        }
-    }*/
-	
-	Queue* things = new Queue[queues];
-	int clocktick=0;
-	int workDone=0;
-	int i=0;
-	int context=-1;
-	int procDone=0;
-	int queued=0;
-	int modQuantum;
-	printf("We have %d procs\n",arrCount);
-	vector<process> prioritySort;
-
-	while(1){
-		//checks to see if everything is queued. if not it adds all items that have arrived
-		//at the current clock tick
-		
-		/*if(queued<arrCount){
-			while(queued<arrCount&&prime.peekQueue().arrival==clocktick){
-				process tmp=prime.popQueue();
-				things[0].enQueue(tmp);
-				queued++;
-			}
-		}*/
-
-		if(queued<arrCount){
-			while(queued<arrCount&&prime.peekQueue().arrival==clocktick){
-				process tmp=prime.popQueue();
-				queued++;
-				prioritySort.push_back(tmp);
-			}
-			supersort(prioritySort);
-			if(prioritySort.size()>0){
-				for(int a=0;a<prioritySort.size();a++){
-					things[0].enQueue(prioritySort.at(a));
-				}
-			}
-			prioritySort.clear();
-		}
-
-
-		//determines the first queue to have contents
-		for(i=0;i<queues;i++){
-			if(things[i].checkReal()){
-				break;
-			}
-		}
-
-		//checks to make sure we are in valid queues. 
-		//The only time this is relevant is if all queues are empty
-		
-		if(i==queues){
-			clocktick++;
-			continue;
-		}
-		
-		//checks to see if current queue is the same as last loop. 
-		//if not it resets the timer for demotions
-		if(context!=i){
-			//workDone=0;
-			context=i;
-			modQuantum=quantum*pow(2,i);
-		}
-
-		things[i].deincrement();
-		things[i].doWork();
-		//workDone++;
-
-		if(things[i].peekQueue().burst==0){
-			process tmp=things[i].popQueue();
-			procDone++;
-			//workDone=0;
-			printf("Process %d terminated in queue %d\n",tmp.pid,i+1);
-			
-		}
-		else if(things[i].peekQueue().worked==modQuantum&&i<queues-2){
-			process tmp=things[i].popQueue();
-			tmp.worked=0;
-			things[i+1].enQueue(tmp);
-		}
-		else if(things[i].peekQueue().worked==modQuantum&&i==queues-2){
-			process tmp=things[i].popQueue();
-			tmp.worked=0;
-			prioritySort.push_back(tmp);
-		}
-
-		things[queues-1].ageQueue();
-		
-		while(things[queues-1].checkReal()&&things[queues-1].peekQueue().age==age){
-			process tmp=things[queues-1].popQueue();
-			tmp.age=0;
-			prioritySort.push_back(tmp);
-		}
-
-		supersort(prioritySort);
-		if(prioritySort.size()>0){
-			for(int a=0;a<prioritySort.size();a++){
-				things[queues-2].enQueue(prioritySort.at(a));
-			}
-			prioritySort.clear();
-		}
-		clocktick++;
-		if(procDone==arrCount){
-			break;
-		}
-	}
+void srt(process arr, int arrCount) {
 }
 
-
-
-void srt(process arr, int arrCount) {}
-
-void hrt(process arr, int arrCount) {}
+void hrt(process arr, int arrCount) {
+}
 
 void display(process proc) {
     cout << proc.pid << " " << proc.burst << " " << proc.arrival << " " << proc.priority << " " << proc.deadline << " "
@@ -268,7 +114,6 @@ void swap(process *a, process *b) {
     *a = *b;
     *b = t;
 }
-
 
 void findWaitingTimeRoundRobin(process arr, int arrCount, int wt[], int quantum) {
     // Make a copy of burst times bt[] to store remaining
@@ -364,11 +209,6 @@ void findavgTimeRoundRobin(process arr, int arrCount, int quantum) {
          << (float) total_tat / (float) arrCount;
 }
 
-/* This function takes last element as pivot, places
-   the pivot element at its correct position in sorted
-    array, and places all smaller (smaller than pivot)
-   to left of pivot and all greater elements to right
-   of pivot */
 int partition(process arr[], int low, int high) {
     int pivot = arr[high].arrival;    // pivot
     int i = (low - 1);  // Index of smaller element
@@ -385,10 +225,6 @@ int partition(process arr[], int low, int high) {
     return (i + 1);
 }
 
-/* The main function that implements QuickSort
- arr[] --> Array to be sorted,
-  low  --> Starting index,
-  high  --> Ending index */
 void quickSort(process arr[], int low, int high) {
     if (low < high) {
         /* pi is partitioning index, arr[p] is now
@@ -407,5 +243,248 @@ void supersort(vector<process> prioritySort){
 		sort(prioritySort.begin(),prioritySort.end(),[](const process& lhs, const process& rhs){
 			return lhs.priority<rhs.priority;
 		});
+	}
+}
+
+void mfqs(Queue prime, int arrCount) {
+    int queues=5;
+	int quantum=4; 
+	int age=50;
+	int ioTime=40;
+	/*
+    while (1) {
+        cout << "How many queues will be generated\n";
+        cin >> queues;
+        if (cin.fail() || queues < 2 || queues > 5) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        } else {
+            break;
+        }
+    }
+    while (1) {
+        cout << "What is the time quantum\n";
+        cin >> quantum;
+        if (cin.fail() || quantum < 1) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        } else {
+            break;
+        }
+    }
+    while (1) {
+        cout << "How long should processes take to age up\n";
+        cin >> age;
+        if (cin.fail() || age < 1) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        } else {
+            break;
+        }
+    }
+	*/
+	Queue things[queues];
+	int clocktick=0;
+	int workDone=0;
+	int i=0;
+	int context=-1;
+	int procDone=0;
+	int queued=0;
+	int modQuantum;
+	printf("We have %d procs\n",arrCount);
+	vector<process> prioritySort;
+	vector<process> ioVector[queues+1];
+
+	while(1){
+		//checks to see if everything is queued. if not it adds all items that have arrived
+		//at the current clock tick
+
+		while(queued<arrCount&&prime.peekQueue().arrival==clocktick){
+			process tmp=prime.popQueue();
+			queued++;
+			prioritySort.push_back(tmp);
+		}
+		supersort(prioritySort);
+		if(prioritySort.size()>0){
+			for(int a=0;a<prioritySort.size();a++){
+				things[0].enQueue(prioritySort.at(a));
+			}
+		}
+		prioritySort.clear();
+
+		//determines the first queue to have contents
+		for(i=0;i<queues;i++){
+			if(things[i].checkReal()){
+				break;
+			}
+		}
+
+		//checks to make sure we are in valid queues. 
+		//The only time this is relevant is if all queues are empty
+		
+		if(i==queues){
+			clocktick++;
+			continue;
+		}
+		
+		modQuantum=quantum*pow(2,i);
+		things[i].deincrement();
+		things[i].doWork();
+		
+		if(things[i].peekQueue().burst==0){
+			process tmp=things[i].popQueue();
+			procDone++;
+			printf("Process %d terminated in queue %d\n",tmp.pid,i+1);
+		}
+		else if(things[i].peekQueue().worked>=modQuantum&&((i<queues-3||i==queues-2)||(queues==2&&i==0))){
+			process tmp=things[i].popQueue();
+			tmp.worked=0;
+			things[i+1].enQueue(tmp);
+		}
+		else if(things[i].peekQueue().worked>=modQuantum&&i==queues-3){
+			process tmp=things[i].popQueue();
+			tmp.worked=0;
+			prioritySort.push_back(tmp);
+		}
+
+		things[queues-1].ageQueue();
+		
+		while(things[queues-1].checkReal()&&things[queues-1].peekQueue().age>=age){
+			process tmp=things[queues-1].popQueue();
+			tmp.age=0;
+			prioritySort.push_back(tmp);
+		}
+
+		supersort(prioritySort);
+		if(prioritySort.size()>0){
+			for(int a=0;a<prioritySort.size();a++){
+				things[queues-2].enQueue(prioritySort.at(a));
+			}
+			prioritySort.clear();
+		}
+		clocktick++;
+		if(procDone==arrCount){
+			break;
+		}
+	}
+}
+
+void theory(Queue prime, int arrCount) {
+    int queues=5;
+	int quantum=4; 
+	int age=50;
+	int ioTime=10;
+	/*
+		while (1) {
+			cout << "How many queues will be generated\n";
+			cin >> queues;
+			if (cin.fail() || queues < 2 || queues > 5) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			} else {
+				break;
+			}
+		}
+		while (1) {
+			cout << "What is the time quantum\n";
+			cin >> quantum;
+			if (cin.fail() || quantum < 1) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			} else {
+				break;
+			}
+		}
+		while (1) {
+			cout << "How long should processes take to age up\n";
+			cin >> age;
+			if (cin.fail() || age < 1) {
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			} else {
+				break;
+			}
+		}
+	*/
+	Queue things[queues];
+	int clocktick=0;
+	int workDone=0;
+	int i=0;
+	int context=-1;
+	int procDone=0;
+	int queued=0;
+	int modQuantum;
+	printf("We have %d procs\n",arrCount);
+	vector<process> ioVector[queues+1];
+
+	while(1){
+		//checks to see if everything is queued. if not it adds all items that have arrived
+		//at the current clock tick
+
+		while(queued<arrCount&&prime.peekQueue().arrival==clocktick){
+			process tmp=prime.popQueue();
+			queued++;
+			ioVector[0].push_back(tmp);
+		}
+
+		//determines the first queue to have contents
+		for(i=0;i<queues;i++){
+			if(things[i].checkReal()){
+				break;
+			}
+		}
+
+		//checks to make sure we are in valid queues. 
+		//The only time this is relevant is if all queues are empty
+
+		modQuantum=quantum*pow(2,i);
+		if(i<queues){
+			things[i].deincrement();
+			things[i].doWork();
+			if(things[i].peekQueue().burst==0){
+				process tmp=things[i].popQueue();
+				procDone++;
+				printf("Process %d terminated in queue %d\n",tmp.pid,i+1);
+			}
+			else if(things[i].peekQueue().worked>=modQuantum&&i<queues-1){
+				process tmp=things[i].popQueue();
+				tmp.worked=0;
+				tmp.queue=i+1;
+				ioVector[tmp.queue].push_back(tmp);
+			}
+			
+			else if(things[i].peekQueue().worked>=ioTime){
+				process tmp=things[i].popQueue();
+				tmp.queue=0;
+				ioVector[queues].push_back(tmp);
+			}
+
+			things[queues-1].ageQueue();
+			while(things[queues-1].checkReal()&&things[queues-1].peekQueue().age>=age){
+				process tmp=things[queues-1].popQueue();
+				tmp.age=0;
+				ioVector[queues-2].push_back(tmp);
+			}
+		}
+		for(int a=0;a<ioVector[queues].size();a++){
+			ioVector[queues].at(a).io--;
+			if(ioVector[queues].at(a).io<=0){
+				process tmp=ioVector[queues].at(a);
+				ioVector[queues].erase(ioVector[queues].begin()+a);
+				a--;
+				ioVector[tmp.queue].push_back(tmp);
+			}
+		}
+		for(int q=0;q<queues;q++){
+			supersort(ioVector[q]);
+			for(int a=0;a<ioVector[q].size();a++){
+				things[q].enQueue(ioVector[q].at(a));
+			}
+			ioVector[q].clear();
+		}
+		clocktick++;
+		if(procDone==arrCount){
+			break;
+		}
 	}
 }

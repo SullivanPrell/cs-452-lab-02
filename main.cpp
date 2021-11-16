@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdio.h>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 

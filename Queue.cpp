@@ -70,6 +70,29 @@ void Queue::setWork(int val){
 	head->data.worked=val;
 }
 
+void Queue::ageQueue(){
+	QueueNode *cur=head;
+	while(cur!=nullptr){
+		cur->data.age++;
+		cur=cur->next;
+	}
+}
+
+void Queue::execIO(){
+	QueueNode *cur=head;
+	while(cur!=nullptr){
+		cur->data.io--;
+		cur=cur->next;
+	}
+}
+
+bool Queue::checkReal(){
+	if(head==nullptr){
+		return false;
+	}
+	return true;
+}
+
 process Queue::popQueue() {
     process returnProcess = peekQueue();
     deQueue();

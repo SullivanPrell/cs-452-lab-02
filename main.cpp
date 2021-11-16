@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <algorithm>
 #include <cmath>
+#include "hrt.h"
 
 using namespace std;
 
@@ -17,17 +18,7 @@ void findTurnAroundTimeRoundRobin(vector<process> arr, int arrCount, int wt[], i
 
 void findavgTimeRoundRobin(vector<process> arr, int arrCount, int quantum);
 
-process findTail(process head);
-
-void doWork(process head);
-
 void srt(vector<process> arr, int arrCount);
-
-void hrt(process arr[], int arrCount);
-
-void display(process proc);
-
-void quickSort(process arr[], int low, int high);
 
 int partition(vector<process> arr, int low, int high);
 
@@ -90,10 +81,10 @@ int main(int argc, char **argv) {
     });
 
     bool select = false;
-    string mode = "mfqs";
+    string mode;
     while (!select) {
-        //cout << "Select mfqs, srt, or hrt\n";
-        //cin >> mode;
+        cout << "Select mfqs, srt, or hrt\n";
+        cin >> mode;
         if (mode == "mfqs") {
             Queue prime;
             for (int i = 0; i < numProcess; i++) {
@@ -105,7 +96,7 @@ int main(int argc, char **argv) {
             srt(processes, numProcess);
             select = true;
         } else if (mode == "hrt") {
-//            hrt(arr, numProcess);
+            hrt::performHardRealTime(processes, numProcess);
             select = true;
         }
     }
@@ -239,7 +230,6 @@ void srt(vector<process> arr, int arrCount) {
     findavgTimeRoundRobin(arr, arrCount, time);
 }
 
-void hrt(process arr[], int arrCount) {}
 
 void display(process proc) {
     cout << proc.pid << " " << proc.burst << " " << proc.arrival << " " << proc.priority << " " << proc.deadline << " "

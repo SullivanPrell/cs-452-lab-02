@@ -1,7 +1,3 @@
-//
-// Created by sulli on 11/14/2021.
-//
-
 #include "hrt.h"
 #include "Queue.h"
 #include <vector>
@@ -15,7 +11,6 @@ int tickCount = 0;
 void hrt::performHardRealTime(std::vector<process> processes, int numProcess) {
     bool allProcessesComplete = false;
     int processesComplete = 0;
-    int deadProcesses = 0;
     process currentProcess;
     // Sort by arrival time
     sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
@@ -23,10 +18,10 @@ void hrt::performHardRealTime(std::vector<process> processes, int numProcess) {
     });
     // Begin HRT
     while (!allProcessesComplete) {
-        if (processesComplete + deadProcesses == numProcess) {
+        if (processesComplete == numProcess) {
             allProcessesComplete = true;
         } else {
-            currentProcess = processes[processesComplete + deadProcesses];
+            currentProcess = processes[processesComplete];
             if (currentProcess.arrival == tickCount ||
                 (currentProcess.arrival < tickCount && currentProcess.deadline < tickCount)) {
                 // On arrival or past arrival BUT before deadline
@@ -41,8 +36,7 @@ void hrt::performHardRealTime(std::vector<process> processes, int numProcess) {
                         processesComplete++;
                         continue;
                     } else {
-                        tickCount++;
-                        continue;
+                        break;
                     }
                 }
             } else if (currentProcess.arrival < tickCount) {
@@ -51,11 +45,9 @@ void hrt::performHardRealTime(std::vector<process> processes, int numProcess) {
                 continue;
             } else if (currentProcess.arrival > tickCount && currentProcess.deadline > tickCount) {
                 // Dead Process
-                deadProcesses++;
-                tickCount++;
-                //TODO: how do we deal with this?
-                continue;
+                break;
             }
         }
     }
+    printf("\ncompleted processes: %d",processesComplete);
 }

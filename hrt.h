@@ -16,7 +16,7 @@
 
 class hrt {
 public:
-    void performHardRealTime(std::vector<process> processes, int numProcess);
+    static void performHardRealTime(std::vector<process> processes, int numProcess);
 };
 
 

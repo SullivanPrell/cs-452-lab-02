@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     string rawString;
     int parsedInt;
     process tempProcess;
-    while (numProcess < 200) {
+    while (!fileIn.eof()) {
         if (numProcess > 0) {
             fileIn >> rawString; //PID
             parsedInt = std::stoi(rawString);

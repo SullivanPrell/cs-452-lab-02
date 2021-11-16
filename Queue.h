@@ -21,6 +21,11 @@ class Queue {
         void deQueue();
         process peekQueue();
         process popQueue();
+		void deincrement();
+		void age();
+		void setAge(int val);
+		void doWork();
+		void setWork(int val);
         QueueNode *head, *tail;
 
     Queue() {

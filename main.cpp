@@ -6,9 +6,11 @@
 #include "Queue.h"
 #include "process.h"
 #include <vector>
+#include <stdio.h>
+#include <math.h>
 using namespace std;
 
-void mfqs(process raw, int arrCount);
+void mfqs(Queue raw, int arrCount);
 
 void findWaitingTimeRoundRobin(process arr[], int arrCount, int wt[], int quantum);
 
@@ -44,18 +46,27 @@ int main(int argc, char **argv) {
 
     string line;
     int ProcNum = 0;
-    while (getline(inputFile, line)) {
+  
+	while (getline(inputFile, line)) {
         if (line.find('-') > line.length() && line.find('P') > line.length()) {
             strings.push_back(line);
             ProcNum++;
         }
     }
-
+	
+/*
+	while(ProcNum<10){
+		getline(inputFile, line); 
+        if (line.find('-') > line.length() && line.find('P') > line.length()) {
+            strings.push_back(line);
+            ProcNum++;
+        }
+    }
+*/
     //Closing file
     inputFile.close();
 
     process *arr = new process[ProcNum];
-    printf("Arr made\n");
 
     for (int i = 0; i < ProcNum; i++) {
         line = strings[i];
@@ -73,16 +84,26 @@ int main(int argc, char **argv) {
         arr[i].deadline = n;
         is >> n;
         arr[i].io = n;
+		arr[i].age=0;
     }
     quickSort(arr, 0, ProcNum-1);
 
+
+
+	quickSort(arr,0,ProcNum-1);
+
+
     bool select = false;
-    string mode = "";
+    string mode = "mfqs";
     while (!select) {
-        cout << "Select mfqs, srt, or hrt\n";
-        cin >> mode;
+        //cout << "Select mfqs, srt, or hrt\n";
+        //cin >> mode;
         if (mode == "mfqs") {
-            mfqs(arr[0], ProcNum);
+			Queue prime;
+			for(int i=0;i<ProcNum;i++){
+				prime.enQueue(arr[i]);
+			}
+            mfqs(prime, ProcNum);
             select = true;
         } else if (mode == "srt") {
             srt(arr, ProcNum);
@@ -97,9 +118,11 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-void mfqs(process raw, int arrCount) {
-    int queues, quantum, age;
-
+void mfqs(Queue prime, int arrCount) {
+    int queues=5;
+	int quantum=4; 
+	int age=5;
+	/*
     while (1) {
         cout << "How many queues will be generated\n";
         cin >> queues;
@@ -129,9 +152,86 @@ void mfqs(process raw, int arrCount) {
         } else {
             break;
         }
-    }
+    }*/
+	
+	Queue* things = new Queue[queues];
+	int clocktick=0;
+	int workDone=0;
+	int i=0;
+	int context=-1;
+	int procDone=0;
+	int queued=0;
+	int modQuantum;
+	printf("We have %d procs\n",arrCount);
 
-}
+	while(1){
+		//checks to see if everything is queued. if not it adds all items that have arrived
+		//at the current clock tick
+		if(queued<arrCount){
+			while(queued<arrCount&&prime.peekQueue().arrival==clocktick){
+				process tmp=prime.popQueue();
+				things[0].enQueue(tmp);
+				queued++;
+			}
+		}
+		//determines the first queue to have contents
+		for(i=0;i<queues;i++){
+			if(things[i].head!=nullptr){
+				break;
+			}
+		}
+
+		//checks to make sure we are in valid queues. 
+		//The only time this is relevant is if all queues are empty
+		
+		if(i==queues){
+			clocktick++;
+			continue;
+		}
+		
+		//checks to see if current queue is the same as last loop. 
+		//if not it resets the timer for demotions
+		if(context!=i){
+			//workDone=0;
+			context=i;
+			modQuantum=quantum*pow(2,i);
+		}
+
+		things[i].deincrement();
+		things[i].doWork();
+		//workDone++;
+
+		if(things[i].peekQueue().burst==0){
+			process tmp=things[i].popQueue();
+			procDone++;
+			//workDone=0;
+			printf("Process %d terminated in queue %d\n",tmp.pid,i+1);
+			
+		}
+		else if(things[i].peekQueue().worked==modQuantum&&i<queues-1){
+			process tmp=things[i].popQueue();
+			//printf("%d demoted to %d\n",tmp.pid,i+1);
+			tmp.worked=0;
+			things[i+1].enQueue(tmp);
+			//workDone=0;
+		}
+		else if(i==queues-1){
+			if(things[i].peekQueue().age==age){
+				process tmp=things[i].popQueue();
+				tmp.age=0;
+				printf("%d promoted\n",tmp.pid);
+				things[i-1].enQueue(tmp);
+			}
+			else{
+				things[i].age();
+			}
+		}
+		clocktick++;
+		if(procDone==arrCount){
+			break;
+		}
+	}
+
 
 void doWork(process head) {
     head.burst--;
@@ -144,7 +244,6 @@ void srt(process arr[], int arrCount) {
     cout << "Starting soft real time round robin:\n";
     findavgTimeRoundRobin(arr, arrCount, time);
 }
-
 void hrt(process arr[], int arrCount) {}
 
 void display(process proc) {

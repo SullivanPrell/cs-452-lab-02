@@ -15,6 +15,8 @@ class process {
         int deadline;
         int io;
         int queue;
+		int age;
+		int worked;
 };
 
 

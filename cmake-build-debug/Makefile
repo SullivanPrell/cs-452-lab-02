@@ -153,6 +153,33 @@ Queue.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\Queue.cpp.s
 .PHONY : Queue.cpp.s
 
+hrt.obj: hrt.cpp.obj
+
+.PHONY : hrt.obj
+
+# target to build an object file
+hrt.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\hrt.cpp.obj
+.PHONY : hrt.cpp.obj
+
+hrt.i: hrt.cpp.i
+
+.PHONY : hrt.i
+
+# target to preprocess a source file
+hrt.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\hrt.cpp.i
+.PHONY : hrt.cpp.i
+
+hrt.s: hrt.cpp.s
+
+.PHONY : hrt.s
+
+# target to generate assembly for a file
+hrt.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\hrt.cpp.s
+.PHONY : hrt.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -219,6 +246,9 @@ help:
 	@echo ... Queue.obj
 	@echo ... Queue.i
 	@echo ... Queue.s
+	@echo ... hrt.obj
+	@echo ... hrt.i
+	@echo ... hrt.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

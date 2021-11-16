@@ -62,8 +62,8 @@ int main(int argc, char **argv) {
             fileIn >> rawString; //IO
             parsedInt = std::stoi(rawString);
             tempProcess.io = parsedInt;
-            if (tempProcess.pid < 0 || tempProcess.burst < 0 || tempProcess.arrival < 0 || tempProcess.deadline < 0 ||
-                tempProcess.io < 0 || tempProcess.priority < 0) {
+            if (tempProcess.pid < 0 && tempProcess.burst < 0 && tempProcess.arrival <= 0 && tempProcess.deadline < 0 &&
+                tempProcess.io < 0 && tempProcess.priority < 0) {
                 //ignore
             } else {
                 processes.push_back(tempProcess);
@@ -81,10 +81,6 @@ int main(int argc, char **argv) {
     }
     fileIn.close();
 
-    sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
-        return lhs.arrival < rhs.arrival;
-    });
-
     bool select = false;
     string mode;
     while (!select) {
@@ -101,6 +97,9 @@ int main(int argc, char **argv) {
             srt(processes, numProcess);
             select = true;
         } else if (mode == "hrt") {
+            sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
+                return lhs.arrival < rhs.arrival;
+            });
             hrt::performHardRealTime(processes, numProcess);
             select = true;
         }

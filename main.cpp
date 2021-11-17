@@ -43,54 +43,41 @@ int main(int argc, char **argv) {
     string rawString;
     int parsedInt;
     process tempProcess;
-    while (!fileIn.eof()) {
-        if (numProcess > 0) {
-            fileIn >> rawString; //PID
-            parsedInt = std::stoi(rawString);
-            tempProcess.pid = parsedInt;
+	string line;
+	int n;
+    while (getline(fileIn,line)) {
+        if (line.find('-') > line.length() && line.find('P') > line.length()) {
+			stringstream is(line);
+			is >> n;
+			tempProcess.pid = n;
+			is >> n;
+			tempProcess.burst = n;
+			is >> n;
+			tempProcess.arrival = n;
+			is >> n;
+			tempProcess.priority = n;
+			is >> n;
+			tempProcess.deadline = n;
+			is >> n;
+			tempProcess.io = n;
+			tempProcess.age=0;
+			tempProcess.queue=0;
+			tempProcess.worked=0;
 
-            fileIn >> rawString; //BST
-            parsedInt = std::stoi(rawString);
-            tempProcess.burst = parsedInt;
-
-            fileIn >> rawString; //ARR
-            parsedInt = std::stoi(rawString);
-            tempProcess.arrival = parsedInt;
-
-            fileIn >> rawString; //PRI
-            parsedInt = std::stoi(rawString);
-            tempProcess.priority = parsedInt;
-
-            fileIn >> rawString; //DLINE
-            parsedInt = std::stoi(rawString);
-            tempProcess.deadline = parsedInt;
-
-            fileIn >> rawString; //IO
-            parsedInt = std::stoi(rawString);
-            tempProcess.io = parsedInt;
-            if (tempProcess.pid < 0 || tempProcess.burst < 0 || tempProcess.arrival <= 0 || tempProcess.deadline < 0 ||
+            if (tempProcess.pid < 0 || tempProcess.burst < 0 || tempProcess.arrival < 0 || tempProcess.deadline < 0 ||
                 tempProcess.io < 0 || tempProcess.priority < 0) {
                 //ignore
             } else {
                 tempProcess.age = 0;
                 tempProcess.queue = 0;
                 tempProcess.worked = 0;
-				display(tempProcess);
-                processes.push_back(tempProcess);
-            }
-
-        } else {
-            fileIn >> rawString;
-            fileIn >> rawString;
-            fileIn >> rawString;
-            fileIn >> rawString;
-            fileIn >> rawString;
-            fileIn >> rawString;
-        }
-        ++numProcess;
+	            processes.push_back(tempProcess);
+				numProcess++;
+			}
+        } 
     }
     fileIn.close();
-	numProcess-=2;
+
 
     bool select = false;
     string mode;
@@ -98,7 +85,7 @@ int main(int argc, char **argv) {
         cout << "Select mfqs, srt, or hrt\n";
         cin >> mode;
         if (mode == "mfqs") {
-		sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
+			sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
                 return lhs.arrival < rhs.arrival;
             });
             Queue prime;
@@ -106,7 +93,7 @@ int main(int argc, char **argv) {
             for (int i = 0; i < numProcess; i++) {
                 prime.enQueue(processes[i]);
             }
-            mfqs(prime, numProcess);
+            theory(prime, numProcess);
             select = true;
         } else if (mode == "srt") {
             srt(processes, numProcess);
@@ -419,7 +406,6 @@ void theory(Queue prime, int arrCount) {
     int queues = 5;
     int quantum = 4;
     int age = 50;
-    int ioTime = 1;
     /*
         while (1) {
             cout << "How many queues will be generated\n";
@@ -491,31 +477,39 @@ void theory(Queue prime, int arrCount) {
                 process tmp = things[i].popQueue();
                 procDone++;
                 printf("Process %d terminated in queue %d\n", tmp.pid, i + 1);
-            } else if (things[i].peekQueue().worked >= modQuantum && i < queues - 1) {
+            } 
+			else if (things[i].peekQueue().burst == 1) {
+                process tmp = things[i].popQueue();
+                tmp.queue = 0;
+                ioVector[queues].push_back(tmp);
+				printf("Process %d sent to io\n", tmp.pid);
+
+            }
+			else if (things[i].peekQueue().worked >= modQuantum && i < queues - 1) {
                 process tmp = things[i].popQueue();
                 tmp.worked = 0;
                 tmp.queue = i + 1;
                 ioVector[tmp.queue].push_back(tmp);
-            } else if (things[i].peekQueue().worked >= ioTime) {
-                process tmp = things[i].popQueue();
-                tmp.queue = 0;
-                ioVector[queues].push_back(tmp);
-            }
+				printf("Process %d demoted to queue %d\n", tmp.pid, tmp.queue+1);
 
-            things[queues - 1].ageQueue();
-            while (things[queues - 1].checkReal() && things[queues - 1].peekQueue().age >= age) {
-                process tmp = things[queues - 1].popQueue();
-                tmp.age = 0;
-                ioVector[queues - 2].push_back(tmp);
             }
         }
+
+		things[queues - 1].ageQueue();
+		while (things[queues - 1].checkReal() && things[queues - 1].peekQueue().age >= age) {
+			process tmp = things[queues - 1].popQueue();
+			tmp.age = 0;
+			ioVector[queues-2].push_back(tmp);
+			printf("Process %d aged up\n", tmp.pid);
+
+		}
         for (int a = 0; a < ioVector[queues].size(); a++) {
             ioVector[queues].at(a).io--;
             if (ioVector[queues].at(a).io <= 0) {
                 process tmp = ioVector[queues].at(a);
                 ioVector[queues].erase(ioVector[queues].begin() + a);
                 a--;
-                ioVector[tmp.queue].push_back(tmp);
+                ioVector[0].push_back(tmp);
             }
         }
         for (int q = 0; q < queues; q++) {
@@ -526,6 +520,7 @@ void theory(Queue prime, int arrCount) {
             ioVector[q].clear();
         }
         clocktick++;
+
         if (procDone == arrCount) {
             break;
         }

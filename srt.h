@@ -14,7 +14,7 @@
 class srt{
     public:
     static void dosrt(std::vector<process> arr, int arrCount, int quantum);
-    static void deadSort(vector<process> things);
+    static void deadSort(std::vector<process> things);
 };
 
 #endif

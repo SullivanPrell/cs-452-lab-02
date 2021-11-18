@@ -16,45 +16,70 @@ using namespace std;
 void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
     bool ProcsCompleted = false;
     int completed = 0;
-    process currentProcess;
     int burstRemaining[arrCount];
     long avg_turnaround_time;
     long avg_waiting_time;
     long total_turnaround_time = 0;
     long total_waiting_time = 0;
     int currentTime = 0;
+    vector<process> waiting;
 
-    for (int i = 0; i < arrCount; i++) {
-        burstRemaining[i] = arr[i].burst;
-    }
 
-    cout<<"#P\t"<<"AT\t"<<"BT\t"<<"TAT\t"<<"WT\t"<<"\n"<<endl;
+    std::cout<<"#P\t"<<"AT\t"<<"BT\t"<<"TAT\t"<<"WT\t"<<"\n"<<endl;
 
     while (ProcsCompleted == false) {
         if (completed == arrCount) {
             ProcsCompleted = true;
         } else {
-            currentProcess = arr[completed];
-            if (burstRemaining[completed] > 0) {
-                burstRemaining[completed] -= quantum;
-                currentTime += quantum;
-            } else {
-                currentTime += burstRemaining[completed];
-                burstRemaining[completed] = 0;
-                arr[completed].completion_time = currentTime;
-                arr[completed].turnaround_time = arr[completed].completion_time - arr[completed].arrival;
-                arr[completed].waiting_time = arr[completed].turnaround_time - arr[completed].burst;
-                total_turnaround_time += arr[completed].turnaround_time;
-                total_waiting_time += arr[completed].waiting_time;
-                cout<<arr[completed].pid<<"\t"<<arr[completed].arrival<<"\t"<<arr[completed].burst<<"\t"<<arr[completed].turnaround_time<<"\t"<<arr[completed].waiting_time<<"\n";
-                completed++;
+            int cur=0;
+            while (arr.size()>0&&arr.at(cur).arrival==currentTime){
+                process tmp=arr.at(cur);
+                tmp.slack=tmp.deadline-tmp.burst-currentTime;
+                waiting.push_back(tmp);
+                arr.erase(arr.begin());
+            }
+            deadSort(waiting);
+            for(int i=0;i<waiting.size();i++){
+                if(waiting.at(i).slack<0){
+                    std::cout<<waiting.at(i).pid<<" failed to complete\n";
+                    waiting.erase(waiting.begin() + i);
+                    completed++;
+                    i--;
+                } else {break;}
+            }
+            waiting.at(0).burst--;
+                if(waiting.at(0).burst==0){
+                    std::cout<<waiting.at(0).pid<<" completed\n";
+                    waiting.erase(waiting.begin());
+                    arr[completed].completion_time = currentTime;
+                    arr[completed].turnaround_time = arr[completed].completion_time - arr[completed].arrival;
+                    arr[completed].waiting_time = arr[completed].turnaround_time - arr[completed].burst;
+                    total_turnaround_time += arr[completed].turnaround_time;
+                    total_waiting_time += arr[completed].waiting_time;
+                    completed++;
+                }
+            for(int i=0;i<waiting.size();i++){
+            waiting.at(i).slack--;
             }
         }
+        currentTime++;
     }
+
 
     avg_turnaround_time = total_turnaround_time / arrCount;
     avg_waiting_time = total_waiting_time / arrCount;
 
-    cout<<"Average Turnaround Time = "<<avg_turnaround_time<<endl;
-    cout<<"Average Waiting Time = "<<avg_waiting_time<<endl;
+    std::cout<<"Average Turnaround Time = "<<avg_turnaround_time<<endl;
+    std::cout<<"Average Waiting Time = "<<avg_waiting_time<<endl;
+}
+
+
+
+
+void srt::deadSort(vector<process> things){
+    if(things.size()>1){
+        std::sort(things.begin(),things.end(),[](const process& lhs, const process& rhs){
+            return lhs.slack<rhs.slack;
+        });
+    }
 }

@@ -18,11 +18,11 @@ class process {
         int queue;
 		int age;
 		int worked;
-        int start;
         int completion_time;
         int waiting_time;
         int response_time;
         int turnaround_time;
+        int slack;
 };
 
 

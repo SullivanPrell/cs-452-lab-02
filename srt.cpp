@@ -30,14 +30,14 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
             int cur = 0;
             while ( (arr.size()>0) && (arr.at(cur).arrival==currentTime) ){
                 process tmp=arr.at(cur);
-                tmp.slack=tmp.deadline-tmp.burst-tmp.arrival;
+                tmp.slack=tmp.deadline-tmp.arrival-tmp.burst;
                 waiting.push_back(tmp);
                 arr.erase(arr.begin());
             }
             deadSort(waiting);
             for(int i=0;i<waiting.size();i++){
-                if(waiting.at(i).slack<0){
-                    std::cout<<waiting.at(i).pid<<" failed to complete"<<waiting.at(i).slack<<"\n";
+                if(waiting.at(i).slack<0){                    
+                    std::cout<<currentTime<<"\t"<<waiting.at(i).pid<<" failed to complete"<<"\t"<<waiting.at(i).slack<<"\n";
                     waiting.erase(waiting.begin() + i);
                     completed++;
                     i--;

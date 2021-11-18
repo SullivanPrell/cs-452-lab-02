@@ -13,7 +13,7 @@
 using namespace std;
 
 
-void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
+void srt::dosrt(std::vector<process> arr, int arrCount) {
     bool ProcsCompleted = false;
     int completed = 0;
     long avg_turnaround_time;

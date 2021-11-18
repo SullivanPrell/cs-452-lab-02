@@ -87,11 +87,7 @@ int main(int argc, char **argv) {
             mfqs::doQueues(prime, numProcess);
             select = true;
         } else if (mode == "srt") {
-            int time;
-            cout << "What would you like the time quantum to be?\n";
-            cin >> time;
-            cout << "Starting soft real time scheduling:\n";
-            srt::dosrt(processes, numProcess, time);
+            srt::dosrt(processes, numProcess);
             select = true;
             
         } else if (mode == "hrt") {

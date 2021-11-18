@@ -12,10 +12,6 @@
 
 using namespace std;
 
-void mfqs(Queue raw, int arrCount);
-
-void srt(vector<process> arr, int arrCount);
-
 int partition(vector<process> arr, int low, int high);
 
 void swap(process *a, process *b);
@@ -68,34 +64,36 @@ int main(int argc, char **argv) {
 	            processes.push_back(tempProcess);
 				numProcess++;
 			}
-        } 
+        }
     }
     fileIn.close();
 
 
     bool select = false;
     string mode;
+    sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
+        return lhs.arrival < rhs.arrival;
+    });
     while (!select) {
         cout << "Select mfqs, srt, or hrt\n";
         cin >> mode;
         if (mode == "mfqs") {
 
             Queue prime;
-            sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
-                return lhs.arrival < rhs.arrival;
-            });
             for (int i = 0; i < numProcess; i++) {
                 prime.enQueue(processes[i]);
             }
             mfqs::doQueues(prime, numProcess);
             select = true;
         } else if (mode == "srt") {
-            srt(processes, numProcess);
+            int time;
+            cout << "What would you like the time quantum to be?\n";
+            cin >> time;
+            cout << "Starting soft real time round robin:\n";
+            srt::dosrt(processes, numProcess, time);
             select = true;
+            
         } else if (mode == "hrt") {
-            sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
-                return lhs.arrival < rhs.arrival;
-            });
             hrt::performHardRealTime(processes, numProcess);
             select = true;
         }
@@ -107,14 +105,6 @@ int main(int argc, char **argv) {
 
 void doWork(process head) {
     head.burst--;
-}
-
-void srt(vector<process> arr, int arrCount) {
-    int time;
-    cout << "What would you like the time quantum to be?\n";
-    cin >> time;
-    cout << "Starting soft real time round robin:\n";
-    srt::dosrt(arr, arrCount, time);
 }
 
 

@@ -42,6 +42,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
                 currentTime += burstRemaining[completed];
                 burstRemaining[completed] = 0;
                 arr[completed].completion_time = currentTime;
+                arr[completed].turnaround_time = arr[completed].completion_time - arr[completed].arrival;
                 arr[completed].waiting_time = arr[completed].turnaround_time - arr[completed].burst;
                 total_turnaround_time += arr[completed].turnaround_time;
                 total_waiting_time += arr[completed].waiting_time;

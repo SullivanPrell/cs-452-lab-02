@@ -51,8 +51,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 						waiting.erase(waiting.begin());
 						completed++;
 						failed++;
-					} 
-					else {
+					} else {
 						break;
 					}
 				}

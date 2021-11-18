@@ -27,13 +27,12 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
     int idx;
     int n = arrCount;
     int tq = quantum;
+    int c = 0;
 
     cout<<endl;
     cout<<"#P\t"<<"AT\t"<<"BT\t"<<"ST\t"<<"CT\t"<<"TAT\t"<<"WT\t"<<"RT\t"<<"\n"<<endl;
     for(int i = 0; i < n; i++) {
         burst_remaining[i] = arr[i].burst;
-        cout<<arr[i].pid<<"\t"<<arr[i].arrival<<"\t"<<arr[i].burst<<"\t"<<arr[i].start<<"\t"<<arr[i].completion_time<<"\t"<<arr[i].turnaround_time<<"\t"<<arr[i].waiting_time<<"\t"<<arr[i].response_time<<"\t"<<"\n"<<endl;
-
     }
 
 
@@ -49,6 +48,7 @@ while(completed != n) {
         idx = q.front();
         q.pop();
 
+        cout<<arr[c].pid<<"\t"<<arr[c].arrival<<"\t"<<arr[c].burst<<"\t"<<arr[c].start<<"\t"<<"\n"<<endl;
         if(burst_remaining[idx] == arr[idx].burst) {
             arr[idx].start = max(current_time,arr[idx].arrival);
             total_idle_time += arr[idx].start - current_time;
@@ -94,7 +94,7 @@ while(completed != n) {
             }
         }
 
-
+    c++;
     }
 
     avg_turnaround_time = (float) total_turnaround_time / n;

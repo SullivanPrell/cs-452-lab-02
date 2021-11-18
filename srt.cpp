@@ -101,13 +101,6 @@ while(completed != n) {
     avg_waiting_time = (float) total_waiting_time / n;
     cpu_utilisation = ((arr[n-1].completion_time - total_idle_time) / (float) arr[n-1].completion_time)*100;
 
-
-    cout<<endl;
-    cout<<"#P\t"<<"AT\t"<<"BT\t"<<"ST\t"<<"CT\t"<<"TAT\t"<<"WT\t"<<"RT\t"<<"\n"<<endl;
-
-    for(int i = 0; i < n; i++) {
-        cout<<arr[i].pid<<"\t"<<arr[i].arrival<<"\t"<<arr[i].burst<<"\t"<<arr[i].start<<"\t"<<arr[i].completion_time<<"\t"<<arr[i].turnaround_time<<"\t"<<arr[i].waiting_time<<"\t"<<arr[i].response_time<<"\t"<<"\n"<<endl;
-    }
     cout<<"Average Turnaround Time = "<<avg_turnaround_time<<endl;
     cout<<"Average Waiting Time = "<<avg_waiting_time<<endl;
     cout<<"CPU Utilization = "<<cpu_utilisation<<"%"<<endl;

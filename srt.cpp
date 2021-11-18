@@ -39,13 +39,13 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
                 burstRemaining[completed] -= quantum;
                 currentTime += quantum;
             } else {
-                cout<<arr[completed].pid<<"\t"<<arr[completed].arrival<<"\t"<<arr[completed].burst<<"\t"<<arr[completed].turnaround_time<<"\t"<<arr[completed].waiting_time<<"\n";
                 currentTime += burstRemaining[completed];
                 burstRemaining[completed] = 0;
                 arr[completed].completion_time = currentTime;
                 arr[completed].waiting_time = arr[completed].turnaround_time - arr[completed].burst;
                 total_turnaround_time += arr[completed].turnaround_time;
                 total_waiting_time += arr[completed].waiting_time;
+                cout<<arr[completed].pid<<"\t"<<arr[completed].arrival<<"\t"<<arr[completed].burst<<"\t"<<arr[completed].turnaround_time<<"\t"<<arr[completed].waiting_time<<"\n";
                 completed++;
 
             }

@@ -22,6 +22,8 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
     long total_waiting_time = 0;
     int currentTime = 0;
     vector<process> waiting;
+    int passed = 0;
+    int failed = 0;
 
     while (ProcsCompleted == false) {
         if (completed == arrCount) {
@@ -41,6 +43,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
                     waiting.erase(waiting.begin() + i);
                     completed++;
                     i--;
+                    failed++;
                 } else {break;}
             }
             waiting.at(0).burst--;
@@ -53,6 +56,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
                     total_turnaround_time += arr[completed].turnaround_time;
                     total_waiting_time += arr[completed].waiting_time;
                     completed++;
+                    passed++;
                 }
             for(int i=0;i<waiting.size();i++){
                 waiting.at(i).slack--;
@@ -65,6 +69,9 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
     avg_turnaround_time = total_turnaround_time / arrCount;
     avg_waiting_time = total_waiting_time / arrCount;
 
+
+    std::cout<<"Total processes completed = "<<passed<<endl;
+    std::cout<<"Total processes failed = "<<failed<<endl;
     std::cout<<"Average Turnaround Time = "<<avg_turnaround_time<<endl;
     std::cout<<"Average Waiting Time = "<<avg_waiting_time<<endl;
 }

@@ -12,6 +12,7 @@
 
 using namespace std;
 
+
 int partition(vector<process> arr, int low, int high);
 
 void swap(process *a, process *b);
@@ -89,7 +90,7 @@ int main(int argc, char **argv) {
             int time;
             cout << "What would you like the time quantum to be?\n";
             cin >> time;
-            cout << "Starting soft real time round robin:\n";
+            cout << "Starting soft real time scheduling:\n";
             srt::dosrt(processes, numProcess, time);
             select = true;
             

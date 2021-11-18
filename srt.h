@@ -10,6 +10,7 @@
 #include "process.h"
 #include <vector>
 
+
 class srt{
     public:
     static void dosrt(std::vector<process> arr, int arrCount, int quantum);

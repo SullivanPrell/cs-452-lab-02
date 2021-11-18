@@ -57,7 +57,6 @@ int main(int argc, char **argv) {
 			tempProcess.age=0;
 			tempProcess.queue=0;
 			tempProcess.worked=0;
-			tempProcess.waitTime=0;
 			tempProcess.trueBurst=tempProcess.burst;
             if (tempProcess.pid < 0 || tempProcess.burst < 0 || tempProcess.arrival < 0 || tempProcess.deadline < 0 ||
                 tempProcess.io < 0 || tempProcess.priority < 0) {

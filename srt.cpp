@@ -22,6 +22,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
     long total_waiting_time = 0;
     int currentTime = 0;
     vector<process> waiting;
+    waiting.reserve(arrCount);
     int passed = 0;
     int failed = 0;
 

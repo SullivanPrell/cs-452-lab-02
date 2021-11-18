@@ -41,10 +41,9 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
     int current_time = 0;
     q.push(0);
     int completed = 0;
-    int mark[100];
+    int mark[n];
     memset(mark,0,sizeof(mark));
     mark[0] = 1;
-    cout << "initialized variables";
 
 while(completed != n) {
         idx = q.front();

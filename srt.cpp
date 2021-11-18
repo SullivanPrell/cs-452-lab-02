@@ -75,7 +75,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
 
 
 
-void srt::deadSort(vector<process> things){
+void srt::deadSort(std::vector<process> things){
     if(things.size()>1){
         std::sort(things.begin(),things.end(),[](const process& lhs, const process& rhs){
             return lhs.slack<rhs.slack;

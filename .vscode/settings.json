@@ -39,6 +39,13 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "algorithm": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "ctime": "cpp",
+        "deque": "cpp",
+        "iomanip": "cpp",
+        "numeric": "cpp",
+        "queue": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp"
     }
 }

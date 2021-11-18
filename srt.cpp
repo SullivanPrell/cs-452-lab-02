@@ -23,9 +23,6 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
     int currentTime = 0;
     vector<process> waiting;
 
-
-    std::cout<<"#P\t"<<"AT\t"<<"BT\t"<<"TAT\t"<<"WT\t"<<"\n"<<endl;
-
     while (ProcsCompleted == false) {
         if (completed == arrCount) {
             ProcsCompleted = true;
@@ -33,7 +30,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
             int cur = 0;
             while ( (arr.size()>0) && (arr.at(cur).arrival==currentTime) ){
                 process tmp=arr.at(cur);
-                tmp.slack=tmp.deadline-(tmp.burst-currentTime);
+                tmp.slack=tmp.deadline-tmp.burst-currentTime;
                 waiting.push_back(tmp);
                 arr.erase(arr.begin());
             }

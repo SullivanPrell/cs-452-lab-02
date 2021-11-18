@@ -112,11 +112,3 @@ while(completed != n) {
     cout<<"CPU Utilization = "<<cpu_utilisation<<"%"<<endl;
 
 }
-
-bool srt::compareArrival(process p1, process p2) {
-    return p1.arrival < p2.arrival;
-}
-
-bool srt::compareID(process p1, process p2) {
-    return p1.pid < p2.pid;
-}

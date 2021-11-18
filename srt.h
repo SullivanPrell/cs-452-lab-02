@@ -14,8 +14,6 @@
 class srt{
     public:
     static void dosrt(std::vector<process> arr, int arrCount, int quantum);
-    bool compareArrival(process p1, process p2);
-    bool compareID(process p1, process p2);
 };
 
 #endif

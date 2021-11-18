@@ -28,8 +28,12 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
     int n = arrCount;
     int tq = quantum;
 
+    cout<<endl;
+    cout<<"#P\t"<<"AT\t"<<"BT\t"<<"ST\t"<<"CT\t"<<"TAT\t"<<"WT\t"<<"RT\t"<<"\n"<<endl;
     for(int i = 0; i < n; i++) {
         burst_remaining[i] = arr[i].burst;
+        cout<<arr[i].pid<<"\t"<<arr[i].arrival<<"\t"<<arr[i].burst<<"\t"<<arr[i].start<<"\t"<<arr[i].completion_time<<"\t"<<arr[i].turnaround_time<<"\t"<<arr[i].waiting_time<<"\t"<<arr[i].response_time<<"\t"<<"\n"<<endl;
+
     }
 
 

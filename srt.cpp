@@ -18,8 +18,8 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
     int completed = 0;
     process currentProcess;
     int burstRemaining[arrCount];
-    float avg_turnaround_time;
-    float avg_waiting_time;
+    long avg_turnaround_time;
+    long avg_waiting_time;
     long total_turnaround_time = 0;
     long total_waiting_time = 0;
     int currentTime = 0;
@@ -48,14 +48,12 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
                 total_waiting_time += arr[completed].waiting_time;
                 cout<<arr[completed].pid<<"\t"<<arr[completed].arrival<<"\t"<<arr[completed].burst<<"\t"<<arr[completed].turnaround_time<<"\t"<<arr[completed].waiting_time<<"\n";
                 completed++;
-
             }
         }
-
     }
 
-    avg_turnaround_time = (float) total_turnaround_time / arrCount;
-    avg_waiting_time = (float) total_waiting_time / arrCount;
+    avg_turnaround_time = total_turnaround_time / arrCount;
+    avg_waiting_time = total_waiting_time / arrCount;
 
     cout<<"Average Turnaround Time = "<<avg_turnaround_time<<endl;
     cout<<"Average Waiting Time = "<<avg_waiting_time<<endl;

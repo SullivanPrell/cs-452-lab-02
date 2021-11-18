@@ -10,6 +10,7 @@ class process {
     public:
         int pid;
         int burst;
+		int trueBurst;
         int arrival;
         int priority;
         int deadline;

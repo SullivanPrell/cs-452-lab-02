@@ -86,6 +86,7 @@ void Queue::execIO(){
 	}
 }
 
+
 bool Queue::checkReal(){
 	if(head==nullptr){
 		return false;

@@ -25,12 +25,13 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
     float throughput;
     int burst_remaining[100];
     int idx;
-    int n;
+    int n = arrCount;
     int tq;
 
     for(int i = 0; i < n; i++) {
         burst_remaining[i] = arr[i].burst;
     }
+    cout << "done loop";
 
     queue<int> q;
     int current_time = 0;

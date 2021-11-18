@@ -30,7 +30,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
             int cur = 0;
             while ( (arr.size()>0) && (arr.at(cur).arrival==currentTime) ){
                 process tmp=arr.at(cur);
-                tmp.slack=tmp.deadline-tmp.burst-currentTime;
+                tmp.slack=tmp.deadline-tmp.burst-tmp.arrival;
                 waiting.push_back(tmp);
                 arr.erase(arr.begin());
             }

@@ -22,7 +22,6 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
     long total_waiting_time = 0;
     int currentTime = 0;
     vector<process> waiting;
-    waiting.reserve(arrCount);
     int passed = 0;
     int failed = 0;
 
@@ -31,25 +30,25 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
             ProcsCompleted = true;
         } else {
             int cur = 0;
-            while ( (arr.size()>0) && (arr[0].arrival==currentTime) ){
-                process tmp=arr[0];
+            while ( (arr.size()-1>0) && (arr.at(cur).arrival==currentTime) ){
+                process tmp=arr.at(cur);
                 tmp.slack=tmp.deadline-tmp.arrival-tmp.burst;
-                waiting[cur] = tmp;
+                waiting.push_back(tmp);
                 arr.erase(arr.begin());
             }
             deadSort(waiting);
             for(int i=0;i<waiting.size();i++){
-                if(waiting[i].slack<0){                    
-                    std::cout<<currentTime<<"\t"<<waiting[i].pid<<" failed to complete"<<"\t"<<waiting[i].slack<<"\n";
+                if(waiting.at(i).slack<0){                    
+                    std::cout<<currentTime<<"\t"<<waiting.at(i).pid<<" failed to complete"<<"\t"<<waiting.at(i).slack<<"\n";
                     waiting.erase(waiting.begin() + i);
                     completed++;
                     i--;
                     failed++;
                 } else {break;}
             }
-            waiting[0].burst--;
-                if(waiting[0].burst==0){
-                    std::cout<<currentTime<<waiting[0].pid<<" completed"<<waiting[0].slack<<"\n";
+            waiting.at(0).burst--;
+                if(waiting.at(0).burst==0){
+                    std::cout<<waiting.at(0).pid<<" completed\n";
                     waiting.erase(waiting.begin());
                     arr[completed].completion_time = currentTime;
                     arr[completed].turnaround_time = arr[completed].completion_time - arr[completed].arrival;
@@ -60,7 +59,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
                     passed++;
                 }
             for(int i=0;i<waiting.size();i++){
-                waiting[i].slack--;
+                waiting.at(i).slack--;
             }
         }
         currentTime++;

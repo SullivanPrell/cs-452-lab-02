@@ -48,7 +48,7 @@ while(completed != n) {
         idx = q.front();
         q.pop();
 
-        cout<<arr[c].pid<<"\t"<<arr[c].arrival<<"\t"<<arr[c].burst<<"\t"<<arr[c].start<<"\t"<<"\n"<<endl;
+        cout<<arr[completed].pid<<"\t"<<arr[completed].arrival<<"\t"<<arr[completed].burst<<"\t"<<arr[completed].start<<"\t"<<"\n"<<endl;
         if(burst_remaining[idx] == arr[idx].burst) {
             arr[idx].start = max(current_time,arr[idx].arrival);
             total_idle_time += arr[idx].start - current_time;
@@ -93,8 +93,6 @@ while(completed != n) {
                 }
             }
         }
-
-    c++;
     }
 
     avg_turnaround_time = (float) total_turnaround_time / n;

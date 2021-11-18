@@ -23,7 +23,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
     int total_response_time = 0;
     int total_idle_time = 0;
     float throughput;
-    int burst_remaining[100];
+    int burst_remaining[n];
     int idx;
     int n = arrCount;
     int tq = quantum;

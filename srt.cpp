@@ -30,7 +30,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
             ProcsCompleted = true;
         } else {
             int cur = 0;
-            while ( (arr.size()>0) && (arr.at(cur).arrival==currentTime) ){
+            while ( (arr.size()-1>0) && (arr.at(cur).arrival==currentTime) ){
                 process tmp=arr.at(cur);
                 tmp.slack=tmp.deadline-tmp.arrival-tmp.burst;
                 waiting.push_back(tmp);

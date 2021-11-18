@@ -14,6 +14,7 @@ using namespace std;
 
 
 void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
+    cout << "starting function";
     float avg_turnaround_time;
     float avg_waiting_time;
     float avg_response_time;
@@ -26,8 +27,9 @@ void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
     int burst_remaining[100];
     int idx;
     int n = arrCount;
-    int tq;
+    int tq = quantum;
 
+    cout << "before loop";
     for(int i = 0; i < n; i++) {
         burst_remaining[i] = arr[i].burst;
     }

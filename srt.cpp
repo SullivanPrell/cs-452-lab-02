@@ -16,7 +16,6 @@ using namespace std;
 void srt::dosrt(std::vector<process> arr, int arrCount, int quantum) {
     bool ProcsCompleted = false;
     int completed = 0;
-    int burstRemaining[arrCount];
     long avg_turnaround_time;
     long avg_waiting_time;
     long total_turnaround_time = 0;

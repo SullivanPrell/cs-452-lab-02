@@ -70,7 +70,6 @@ int main(int argc, char **argv) {
                 tempProcess.age = 0;
                 tempProcess.queue = 0;
                 tempProcess.worked = 0;
-				display(tempProcess);
                 processes.push_back(tempProcess);
             }
 

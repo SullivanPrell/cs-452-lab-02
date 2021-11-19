@@ -14,6 +14,7 @@
 class rt{
     public:
         static void dosrt(std::vector<process> arr, int arrCount);
+		static void dohrt(std::vector<process> arr, int arrCount);
         static void performHardRealTime(std::vector<process> &processes, int numProcess);
         static void deadSort(std::vector<process> things);
 		static void inversion(std::vector<process> things);

@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
             select = true;
 
         } else if (mode == "hrt") {
-            rt::performHardRealTime(processes, numProcess);
+            rt::dohrt(processes, numProcess);
             select = true;
         }
     }

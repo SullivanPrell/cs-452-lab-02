@@ -106,7 +106,7 @@ void mfqs::doQueues(Queue prime, int arrCount) {
 		while (things[queues - 1].checkReal() && things[queues - 1].peekQueue().age >= age) {
 			process tmp = things[queues - 1].popQueue();
 			tmp.age = 0;
-			ioVector[queues-2].push_back(tmp);
+			ioVector[0].push_back(tmp);
 			//printf("Process %d aged up\n", tmp.pid);
 			outputVector.push_back("Process "+std::to_string(tmp.pid)+" aged up");
 

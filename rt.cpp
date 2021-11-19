@@ -163,7 +163,7 @@ void rt::performHardRealTime(std::vector<process> &processes, int numProcess) {
 }
 
 
-void srt::deadSort(std::vector<process> things) {
+void rt::deadSort(std::vector<process> things) {
     if (things.size() > 1) {
         std::sort(things.begin(), things.end(), [](const process &lhs, const process &rhs) {
             return lhs.deadline > rhs.deadline;
@@ -171,7 +171,7 @@ void srt::deadSort(std::vector<process> things) {
     }
 }
 
-void srt::inversion(std::vector<process> things) {
+void rt::inversion(std::vector<process> things) {
     if (things.size() > 1) {
         std::sort(things.begin(), things.end(), [](const process &lhs, const process &rhs) {
             return lhs.arrival > rhs.arrival;

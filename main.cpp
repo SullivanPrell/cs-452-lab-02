@@ -69,7 +69,6 @@ int main(int argc, char **argv) {
     }
     fileIn.close();
 
-
     bool select = false;
     string mode;
     sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
@@ -89,7 +88,6 @@ int main(int argc, char **argv) {
         } else if (mode == "srt") {
             int time;
             cout << "Starting soft real time scheduling:\n";
-            cout <<numProcess<<"\n";
             srt::dosrt(processes, numProcess);
             select = true;
             

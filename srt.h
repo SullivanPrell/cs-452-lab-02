@@ -15,6 +15,7 @@ class srt{
     public:
         static void dosrt(std::vector<process> arr, int arrCount);
         static void deadSort(std::vector<process> things);
+		static void inversion(std::vector<process> things);
 };
 
 #endif

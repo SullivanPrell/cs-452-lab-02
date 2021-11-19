@@ -96,8 +96,6 @@ int main(int argc, char **argv) {
             select = true;
         }
     }
-
-    cout << "Terminated Cleanly with " << numProcess << " processes scheduled \n";
     return 0;
 }
 

@@ -22,6 +22,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
     long total_waiting_time = 0;
     int currentTime = 0;
     vector<process> waiting;
+    waiting.reserve(arrCount);
     int passed = 0;
     int failed = 0;
 	bool add=false;
@@ -41,7 +42,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 				while (arr.size()>0&&arr[top].arrival==currentTime){
 					process tmp=arr[top];
 					waiting.push_back(tmp);
-					arr.erase(arr.begin()+top);
+					arr.erase(arr.end()-1);
 					top--;
 					add=true;
 				}
@@ -50,7 +51,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 
 			if(add){
 				std::sort(waiting.begin(),waiting.end(),[](const process& lhs, const process& rhs){
-					return lhs.arrival>rhs.arrival;
+					return lhs.deadline>rhs.deadline;
 				});
 				add=false;
 			}
@@ -59,12 +60,23 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 					if(waiting.size()==0){
 						break;
 					}
-					if(waiting[max].deadline-currentTime<=waiting[max].burst){                    
-						std::cout<<currentTime<<"\t"<<waiting.at(max).pid<<" failed to complete\n";
-						waiting.erase(waiting.begin()+max);
+					if(waiting[max].deadline<waiting[max].burst+currentTime){                    
+						//std::cout<<currentTime<<"\t"<<waiting.at(max).pid<<" failed to complete\n";
+						process tmp=waiting[max];
+						waiting.erase(waiting.end()-1);
 						max--;
 						completed++;
 						failed++;
+						tmp.completion_time = currentTime;
+						tmp.turnaround_time = tmp.completion_time - tmp.arrival;
+						if(tmp.turnaround_time>tmp.trueBurst){
+							tmp.waiting_time = tmp.turnaround_time - tmp.trueBurst;
+						}
+						else{
+							tmp.waiting_time=0;
+						}
+						total_turnaround_time += tmp.turnaround_time;
+						total_waiting_time += tmp.waiting_time;
 					} 
 					else {
 						break;
@@ -76,28 +88,24 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 				}
 				waiting[max].burst--;
 				if(waiting[max].burst==0){
-					std::cout<<currentTime<<"\t"<<waiting.at(max).pid<<" completed\n";
+					//std::cout<<currentTime<<"\t"<<waiting[max].pid<<" completed\n";
 					process tmp=waiting[max];
-					waiting.erase(waiting.begin()+max);
+					waiting.erase(waiting.end()-1);
 					max--;
 					completed++;
 					passed++;
+					//cout << tmp.pid << " " << tmp.burst << " " << tmp.arrival << " " << tmp.priority << " " << tmp.deadline << " "<< tmp.io << "\n";
 					tmp.completion_time = currentTime;
 					tmp.turnaround_time = tmp.completion_time - tmp.arrival;
-					tmp.waiting_time = tmp.turnaround_time - tmp.burst;
+					tmp.waiting_time = tmp.turnaround_time - tmp.trueBurst;
 					total_turnaround_time += tmp.turnaround_time;
 					total_waiting_time += tmp.waiting_time;
-
 				}
 			}
-		}
-		if(currentTime%100==0){
-			//printf("Time - %d, %d/%d done\n",currentTime,completed,arrCount);
 		}
 		currentTime++;
     }
 
-	std::cout<<arrCount<<"\n";
 
     avg_turnaround_time = total_turnaround_time / arrCount;
     avg_waiting_time = total_waiting_time / arrCount;

@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
         printf("Incorrect parameter number\n");
         return 0;
     }
-
+	printf("Assembling processes\n");
     ifstream fileIn{argv[1]};
     vector<process> processes;
     int numProcess = 0;
@@ -87,6 +87,8 @@ int main(int argc, char **argv) {
             mfqs::doQueues(prime, numProcess);
             select = true;
         } else if (mode == "srt") {
+            int time;
+            cout << "Starting soft real time scheduling:\n";
             srt::dosrt(processes, numProcess);
             select = true;
             

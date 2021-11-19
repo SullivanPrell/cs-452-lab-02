@@ -25,6 +25,8 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
     waiting.reserve(arrCount);
     int passed = 0;
     int failed = 0;
+	bool add=false;
+	int max;
 
     while (ProcsCompleted == false) {
         if (completed == arrCount) {
@@ -34,21 +36,27 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 			if(arr.size()==0){
 				break;
 			}
-            int cur = 0;
-            while ( (arr.size()>0) && (arr.at(0).arrival==currentTime) ){
+            while (arr.size()>0&&arr.at(0).arrival==currentTime){
                 process tmp=arr.at(0);
                 waiting.push_back(tmp);
                 arr.erase(arr.begin());
+				add=true;
             }
-			if(waiting.size()>0){
+			max=waiting.size()-1;
+
+			if(add){
 				deadSort(waiting);
+				add=false;
+			}
+			if(waiting.size()>0){
 				while(1){
 					if(waiting.size()==0){
 						break;
 					}
-					if(waiting.at(0).deadline-waiting.at(0).burst<currentTime){                    
-						std::cout<<currentTime<<"\t"<<waiting.at(0).pid<<" failed to complete\n";
-						waiting.erase(waiting.begin());
+					if(waiting[max].deadline-currentTime<=waiting[max].burst){                    
+						//std::cout<<currentTime<<"\t"<<waiting.at(max).pid<<" failed to complete\n";
+						waiting.erase(waiting.begin()+max);
+						max--;
 						completed++;
 						failed++;
 					} else {
@@ -59,11 +67,12 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 					currentTime++;
 					continue;
 				}
-				waiting.at(0).burst--;
-				if(waiting.at(0).burst<=0){
-					std::cout<<waiting.at(0).pid<<" completed\n";
-					process tmp=waiting.at(0);
-					waiting.erase(waiting.begin());
+				waiting[max].burst--;
+				if(waiting[max].burst<=0){
+					std::cout<<waiting[max].pid<<" completed\n";
+					process tmp=waiting[max];
+					waiting.erase(waiting.begin()+max);
+					max--;
 					tmp.completion_time = currentTime;
 					tmp.turnaround_time = tmp.completion_time - tmp.arrival;
 					tmp.waiting_time = tmp.turnaround_time - tmp.burst;
@@ -74,7 +83,10 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 				}
 			}
 		}
-        currentTime++;
+		if(currentTime%1000==0){
+			printf("Time - %d, %d/%d done\n",currentTime,completed,arrCount);
+		}
+		currentTime++;
     }
 
 
@@ -94,7 +106,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 void srt::deadSort(std::vector<process> things){
     if(things.size()>1){
         std::sort(things.begin(),things.end(),[](const process& lhs, const process& rhs){
-            return lhs.deadline<rhs.deadline;
+            return lhs.deadline>rhs.deadline;
         });
     }
 }

@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
         return lhs.arrival < rhs.arrival;
     });
     while (!select) {
-        cout << "Select mfqs, rt, or hrt\n";
+        cout << "Select mfqs, srt, or hrt\n";
         cin >> mode;
         if (mode == "mfqs") {
 

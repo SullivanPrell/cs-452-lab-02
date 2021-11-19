@@ -153,33 +153,6 @@ Queue.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\Queue.cpp.s
 .PHONY : Queue.cpp.s
 
-hrt.obj: hrt.cpp.obj
-
-.PHONY : hrt.obj
-
-# target to build an object file
-hrt.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\hrt.cpp.obj
-.PHONY : hrt.cpp.obj
-
-hrt.i: hrt.cpp.i
-
-.PHONY : hrt.i
-
-# target to preprocess a source file
-hrt.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\hrt.cpp.i
-.PHONY : hrt.cpp.i
-
-hrt.s: hrt.cpp.s
-
-.PHONY : hrt.s
-
-# target to generate assembly for a file
-hrt.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\hrt.cpp.s
-.PHONY : hrt.cpp.s
-
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -234,6 +207,33 @@ process.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\process.cpp.s
 .PHONY : process.cpp.s
 
+rt.obj: rt.cpp.obj
+
+.PHONY : rt.obj
+
+# target to build an object file
+rt.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\rt.cpp.obj
+.PHONY : rt.cpp.obj
+
+rt.i: rt.cpp.i
+
+.PHONY : rt.i
+
+# target to preprocess a source file
+rt.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\rt.cpp.i
+.PHONY : rt.cpp.i
+
+rt.s: rt.cpp.s
+
+.PHONY : rt.s
+
+# target to generate assembly for a file
+rt.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs_452_lab_02.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\cs_452_lab_02.dir\rt.cpp.s
+.PHONY : rt.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -246,15 +246,15 @@ help:
 	@echo ... Queue.obj
 	@echo ... Queue.i
 	@echo ... Queue.s
-	@echo ... hrt.obj
-	@echo ... hrt.i
-	@echo ... hrt.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
 	@echo ... process.obj
 	@echo ... process.i
 	@echo ... process.s
+	@echo ... rt.obj
+	@echo ... rt.i
+	@echo ... rt.s
 .PHONY : help
 
 

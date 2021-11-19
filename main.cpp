@@ -6,9 +6,8 @@
 #include <stdio.h>
 #include <algorithm>
 #include <cmath>
-#include "hrt.h"
 #include "mfqs.h"
-#include "srt.h"
+#include "rt.h"
 
 using namespace std;
 
@@ -27,34 +26,34 @@ int main(int argc, char **argv) {
         printf("Incorrect parameter number\n");
         return 0;
     }
-	printf("Assembling processes\n");
+    printf("Assembling processes\n");
     ifstream fileIn{argv[1]};
     vector<process> processes;
     int numProcess = 0;
     string rawString;
     int parsedInt;
     process tempProcess;
-	string line;
-	int n;
-    while (getline(fileIn,line)) {
+    string line;
+    int n;
+    while (getline(fileIn, line)) {
         if (line.find('-') > line.length() && line.find('P') > line.length()) {
-			stringstream is(line);
-			is >> n;
-			tempProcess.pid = n;
-			is >> n;
-			tempProcess.burst = n;
-			is >> n;
-			tempProcess.arrival = n;
-			is >> n;
-			tempProcess.priority = n;
-			is >> n;
-			tempProcess.deadline = n;
-			is >> n;
-			tempProcess.io = n;
-			tempProcess.age=0;
-			tempProcess.queue=0;
-			tempProcess.worked=0;
-			tempProcess.trueBurst=tempProcess.burst;
+            stringstream is(line);
+            is >> n;
+            tempProcess.pid = n;
+            is >> n;
+            tempProcess.burst = n;
+            is >> n;
+            tempProcess.arrival = n;
+            is >> n;
+            tempProcess.priority = n;
+            is >> n;
+            tempProcess.deadline = n;
+            is >> n;
+            tempProcess.io = n;
+            tempProcess.age = 0;
+            tempProcess.queue = 0;
+            tempProcess.worked = 0;
+            tempProcess.trueBurst = tempProcess.burst;
             if (tempProcess.pid < 0 || tempProcess.burst < 0 || tempProcess.arrival < 0 || tempProcess.deadline < 0 ||
                 tempProcess.io < 0 || tempProcess.priority < 0) {
                 //ignore
@@ -62,9 +61,9 @@ int main(int argc, char **argv) {
                 tempProcess.age = 0;
                 tempProcess.queue = 0;
                 tempProcess.worked = 0;
-	            processes.push_back(tempProcess);
-				numProcess++;
-			}
+                processes.push_back(tempProcess);
+                numProcess++;
+            }
         }
     }
     fileIn.close();
@@ -76,7 +75,7 @@ int main(int argc, char **argv) {
         return lhs.arrival < rhs.arrival;
     });
     while (!select) {
-        cout << "Select mfqs, srt, or hrt\n";
+        cout << "Select mfqs, rt, or hrt\n";
         cin >> mode;
         if (mode == "mfqs") {
 
@@ -89,11 +88,11 @@ int main(int argc, char **argv) {
         } else if (mode == "srt") {
             int time;
             cout << "Starting soft real time scheduling:\n";
-            srt::dosrt(processes, numProcess);
+            rt::dosrt(processes, numProcess);
             select = true;
-            
+
         } else if (mode == "hrt") {
-            hrt::performHardRealTime(processes, numProcess);
+            rt::performHardRealTime(processes, numProcess);
             select = true;
         }
     }
@@ -115,6 +114,7 @@ void swap(process *a, process *b) {
     *a = *b;
     *b = t;
 }
+
 /* This function takes last element as pivot, places
    the pivot element at its correct position in sorted
     array, and places all smaller (smaller than pivot)
@@ -149,6 +149,6 @@ void quickSort(vector<process> arr, int low, int high) {
     }
 }
 
-void mfqs(Queue prime, int arrCount){
-	mfqs::doQueues(prime,arrCount);
+void mfqs(Queue prime, int arrCount) {
+    mfqs::doQueues(prime, arrCount);
 }

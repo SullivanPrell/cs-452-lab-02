@@ -71,6 +71,7 @@ int main(int argc, char **argv) {
 
     bool select = false;
     string mode;
+
     sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
         return lhs.arrival < rhs.arrival;
     });

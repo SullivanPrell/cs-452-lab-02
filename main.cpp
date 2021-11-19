@@ -90,6 +90,7 @@ int main(int argc, char **argv) {
             int time;
             cout << "Starting soft real time scheduling:\n";
             srt::dosrt(processes, numProcess);
+            cout <<numProcess<<"\n";
             select = true;
             
         } else if (mode == "hrt") {

@@ -22,7 +22,6 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
     long total_waiting_time = 0;
     int currentTime = 0;
     vector<process> waiting;
-    waiting.reserve(arrCount);
     int passed = 0;
     int failed = 0;
 	bool add=false;
@@ -89,6 +88,7 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 		currentTime++;
     }
 
+	std::cout<<arrCount<<"\n";
 
     avg_turnaround_time = total_turnaround_time / arrCount;
     avg_waiting_time = total_waiting_time / arrCount;

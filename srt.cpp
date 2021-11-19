@@ -26,25 +26,32 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
     int failed = 0;
 	bool add=false;
 	int max;
+	
 
+	std::sort(arr.begin(),arr.end(),[](const process& lhs, const process& rhs){
+		return lhs.arrival>rhs.arrival;
+	});
     while (ProcsCompleted == false) {
         if (completed == arrCount) {
             ProcsCompleted = true;
         } 
 		else {
-			if(arr.size()==0){
-				break;
+			if(arr.size()>0){
+				int top=arr.size()-1;
+				while (arr.size()>0&&arr[top].arrival==currentTime){
+					process tmp=arr[top];
+					waiting.push_back(tmp);
+					arr.erase(arr.begin()+top);
+					top--;
+					add=true;
+				}
 			}
-            while (arr.size()>0&&arr.at(0).arrival==currentTime){
-                process tmp=arr.at(0);
-                waiting.push_back(tmp);
-                arr.erase(arr.begin());
-				add=true;
-            }
 			max=waiting.size()-1;
 
 			if(add){
-				deadSort(waiting);
+				std::sort(waiting.begin(),waiting.end(),[](const process& lhs, const process& rhs){
+					return lhs.arrival>rhs.arrival;
+				});
 				add=false;
 			}
 			if(waiting.size()>0){
@@ -53,12 +60,13 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 						break;
 					}
 					if(waiting[max].deadline-currentTime<=waiting[max].burst){                    
-						//std::cout<<currentTime<<"\t"<<waiting.at(max).pid<<" failed to complete\n";
+						std::cout<<currentTime<<"\t"<<waiting.at(max).pid<<" failed to complete\n";
 						waiting.erase(waiting.begin()+max);
 						max--;
 						completed++;
 						failed++;
-					} else {
+					} 
+					else {
 						break;
 					}
 				}
@@ -67,23 +75,24 @@ void srt::dosrt(std::vector<process> arr, int arrCount) {
 					continue;
 				}
 				waiting[max].burst--;
-				if(waiting[max].burst<=0){
-					std::cout<<waiting[max].pid<<" completed\n";
+				if(waiting[max].burst==0){
+					std::cout<<currentTime<<"\t"<<waiting.at(max).pid<<" completed\n";
 					process tmp=waiting[max];
 					waiting.erase(waiting.begin()+max);
 					max--;
+					completed++;
+					passed++;
 					tmp.completion_time = currentTime;
 					tmp.turnaround_time = tmp.completion_time - tmp.arrival;
 					tmp.waiting_time = tmp.turnaround_time - tmp.burst;
 					total_turnaround_time += tmp.turnaround_time;
 					total_waiting_time += tmp.waiting_time;
-					completed++;
-					passed++;
+
 				}
 			}
 		}
-		if(currentTime%1000==0){
-			printf("Time - %d, %d/%d done\n",currentTime,completed,arrCount);
+		if(currentTime%100==0){
+			//printf("Time - %d, %d/%d done\n",currentTime,completed,arrCount);
 		}
 		currentTime++;
     }
@@ -109,4 +118,13 @@ void srt::deadSort(std::vector<process> things){
             return lhs.deadline>rhs.deadline;
         });
     }
+}
+
+void srt::inversion(std::vector<process> things){
+    if(things.size()>1){
+        std::sort(things.begin(),things.end(),[](const process& lhs, const process& rhs){
+            return lhs.arrival>rhs.arrival;
+        });
+    }
+
 }

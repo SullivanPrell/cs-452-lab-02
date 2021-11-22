@@ -19,8 +19,9 @@ using namespace std;
 
 class mfqs{
 	public:
-		static void doQueues(Queue prime, int arrCount);
+		static void doQueues(std::vector<process> v, int arrCount, bool ioMode);
 		static void supersort(std::vector<process> v);
+		static vector<process> doManuel();
 };
 
 #endif //CS_452_LAB_02_MFQS_H

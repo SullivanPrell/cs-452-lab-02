@@ -1,45 +1,53 @@
 #include "mfqs.h"
 
 
-void mfqs::doQueues(Queue prime, int arrCount) {
+void mfqs::doQueues(std::vector<process> processes, int arrCount, bool io) {
     int queues = 5;
     int quantum = 4;
     int age = 50;
-    /*
-        while (1) {
-            cout << "How many queues will be generated\n";
-            cin >> queues;
-            if (cin.fail() || queues < 2 || queues > 5) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            } else {
-                break;
-            }
-        }
-        while (1) {
-            cout << "What is the time quantum\n";
-            cin >> quantum;
-            if (cin.fail() || quantum < 1) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            } else {
-                break;
-            }
-        }
-        while (1) {
-            cout << "How long should processes take to age up\n";
-            cin >> age;
-            if (cin.fail() || age < 1) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            } else {
-                break;
-            }
-        }
-    */
+
+	Queue prime;
+	sort(processes.begin(), processes.end(), [](const process &lhs, const process &rhs) {
+		return lhs.arrival < rhs.arrival;
+	});
+	for (int i = 0; i < arrCount; i++) {
+		prime.enQueue(processes[i]);
+	}
+    
+	while (1) {
+		cout << "How many queues will be generated\n";
+		cin >> queues;
+		if (cin.fail() || queues < 2 || queues > 5) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		} else {
+			break;
+		}
+	}
+	while (1) {
+		cout << "What is the time quantum\n";
+		cin >> quantum;
+		if (cin.fail() || quantum < 1) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		} else {
+			break;
+		}
+	}
+	while (1) {
+		cout << "How long should processes take to age up\n";
+		cin >> age;
+		if (cin.fail() || age < 1) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		} else {
+			break;
+		}
+	}
+    
     Queue things[queues];
     int clocktick = 0;
-    int workDone = 0;
+    int workDone =0;
     int i = 0;
     int context = -1;
     int procDone = 0;
@@ -84,7 +92,7 @@ void mfqs::doQueues(Queue prime, int arrCount) {
 				//printf("Process %d terminated in queue %d\n", tmp.pid, i + 1);
 				outputVector.push_back("Process "+to_string(tmp.pid)+" terminated in queue "+to_string(i+1));
             } 
-			else if (things[i].peekQueue().burst == 1) {
+			else if (things[i].peekQueue().burst == 1&&things[i].peekQueue().io>0&&io) {
                 process tmp = things[i].popQueue();
                 tmp.queue = 0;
                 ioVector[queues].push_back(tmp);
@@ -108,7 +116,7 @@ void mfqs::doQueues(Queue prime, int arrCount) {
 			tmp.age = 0;
 			ioVector[0].push_back(tmp);
 			//printf("Process %d aged up\n", tmp.pid);
-			outputVector.push_back("Process "+std::to_string(tmp.pid)+" aged up");
+			outputVector.push_back("Process "+std::to_string(tmp.pid)+" aged up to queue 1");
 
 		}
         for (int a = 0; a < ioVector[queues].size(); a++) {
@@ -132,11 +140,18 @@ void mfqs::doQueues(Queue prime, int arrCount) {
 			outputVector.clear();
 		}
 		else{
-			cout<<outputVector.at(0);
-			for(int a=1;a<outputVector.size()-1;a++){
-				cout<<outputVector.at(a)<<", ";
+			if(arrCount<100){
+				cout<<outputVector.at(0);
+				for(int a=1;a<outputVector.size()-1;a++){
+					cout<<outputVector.at(a)<<", ";
+				}
+				cout<<outputVector.at(outputVector.size()-1)<<"\n";
 			}
-			cout<<outputVector.at(outputVector.size()-1)<<"\n";
+			else{
+				if(clocktick%10000==0){
+					printf("%d/%d processes completed\n",procDone,arrCount);
+				}
+			}
 			outputVector.clear();
 		}
 	
@@ -147,8 +162,8 @@ void mfqs::doQueues(Queue prime, int arrCount) {
     }
 	long averageWait = std::accumulate(aveWait.begin(),aveWait.end(),(long)0)/arrCount;
 	long averageTurnaround = std::accumulate(aveTurn.begin(),aveTurn.end(),(long)0)/arrCount;
-	cout<<"Average Wait time was "<< std::to_string(averageWait) <<
-	" ticks, average turnaround was "<<std::to_string(averageTurnaround)<<" ticks\n";
+	cout<< "Average Wait time was  \t"<< std::to_string(averageWait)<<" Ticks\n";
+	cout<< "Average Turnaround was \t"<<std::to_string(averageTurnaround)<<" Ticks\n";
 }
 void mfqs::supersort(vector<process> prioritySort){
 	if(prioritySort.size()>1){		

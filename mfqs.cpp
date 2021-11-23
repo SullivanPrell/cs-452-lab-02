@@ -92,7 +92,7 @@ void mfqs::doQueues(std::vector<process> processes, int arrCount, bool io) {
 				//printf("Process %d terminated in queue %d\n", tmp.pid, i + 1);
 				outputVector.push_back("Process "+to_string(tmp.pid)+" terminated in queue "+to_string(i+1));
             } 
-			else if (things[i].peekQueue().burst == 1&&things[i].peekQueue().io>0&&io) {
+			else if (things[i].peekQueue().burst == 1&&things[i].peekQueue().io>0&&io&&things[i].peekQueue().io>0) {
                 process tmp = things[i].popQueue();
                 tmp.queue = 0;
                 ioVector[queues].push_back(tmp);

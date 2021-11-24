@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
 				tempProcess.queue = 0;
 				tempProcess.worked = 0;
 				tempProcess.trueBurst = tempProcess.burst;
-				if (tempProcess.pid < 0 || tempProcess.burst < 0 || tempProcess.arrival < 0 || tempProcess.deadline < 0 ||tempProcess.io < 0 || tempProcess.priority < 0) {
+				if (tempProcess.pid < 0 || tempProcess.burst < 1 || tempProcess.arrival < 0 || tempProcess.deadline < 0 ||tempProcess.io < 0 || tempProcess.priority < 0) {
 					//ignore
 				} else if(io=="1"&&tempProcess.burst<=tempProcess.io&&tempProcess.io>0){
 					//ignore
@@ -109,6 +109,8 @@ int main(int argc, char **argv) {
             select = true;
         }else{
 			printf("Bad input, please select mfqs, srt, or hrt\n");
+			mode="";
+			cin >> mode;
 		}
     }
     return 0;

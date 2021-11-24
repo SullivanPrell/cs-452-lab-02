@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 int partition(vector<process> arr, int low, int high);
 
 void swap(process *a, process *b);
@@ -108,8 +107,7 @@ int main(int argc, char **argv) {
             rt::dohrt(processes, numProcess);
             select = true;
         }else{
-			printf("Bad input, please select mfqs, srt, or hrt\n");
-			mode="";
+			cout<<"Bad input, please select mfqs, srt, or hrt\n";
 			cin >> mode;
 		}
     }
